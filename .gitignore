@@ -1,0 +1,8 @@
+#files
+*.a
+*.so
+*.o
+*_ut
+
+#dir
+output/

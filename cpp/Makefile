@@ -20,7 +20,10 @@ LDFLAGS		= $(LIB)
 
 target = t libmisc.a misc_ut
 
-all: $(target) 
+all: $(target) $(lib_target)
+	mkdir -p output
+	mv $(target) output
+	cp *.h output
 
 libmisc.a : misc.o testharness.o
 	ar cr $@ $^
