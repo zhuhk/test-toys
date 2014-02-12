@@ -4,19 +4,47 @@
 #include <time.h>
 #include <sys/time.h>
 #include <string.h>
+#include <string>
+#include <iostream>
 
 #include "misc.h"
 
 void t_time();
+void t_string();
+void t_enum();
 
 int main(int argc, char**argv){
-    NOTICE("info\n");
-    WARNING("WARN\n");
-
+	t_string();
 //    t_time();
     return 0;
 }
+void t_enum() {
+	enum test{
+		v1,
+		v2,
+		v3,
+	};
+}
+void t_string(){
+	using namespace std;
+	
+	NOTICE("sizeof(string)=%lu", sizeof(string));
+	NOTICE("sizeof(void *)=%lu", sizeof(void *));
 
+	static union {
+		void * align;
+		char s[sizeof(string)];
+	} s[2];
+
+	string* const no = new(s[0].s) string("123457891111111111");
+	cout << *no <<endl;
+
+	char str[10]="aaaaa";
+	string *pstr = new(str) string("12345");
+	cout << *pstr <<endl;
+	NOTICE("str(p)=%p,str=%s\n", &str, str);
+	NOTICE("pstr  =%p\n", pstr);
+}
 void t_time(){
     time_t t1,t2;
     char strbuf[100]="123";
