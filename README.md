@@ -1,4 +1,4 @@
-test-toys
+test-toys, 编码练习
 =========
 
 1.cpp, c/c++方面的测试程序，其中的libmisc.a是基础功能，为其它目录所依赖
@@ -15,3 +15,6 @@ test-toys
     - stack, 打印栈的功能的试用
   - luadir.so, dir封装为lua函数。测试命令:lua dir.lua
   - luaexpat.so, xml解析库封装为lua函数。测试命令：lua expat.lua
+
+
+3. py, python学习过程中的一些练习
