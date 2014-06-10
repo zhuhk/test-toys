@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -6,44 +7,85 @@
 #include <string.h>
 #include <string>
 #include <iostream>
-
+#include <algorithm>
 #include "misc.h"
 
 void t_time();
 void t_string();
 void t_enum();
-
+void t_ctype();
+void t_stream();
+using namespace std;
 int main(int argc, char**argv){
-	t_string();
-//    t_time();
+    //printf("argc=%d\n",argc);
+    //t_ctype();
+    t_stream();
+    //t_string();
+    //    t_time();
     return 0;
 }
+void t_stream(){
+    string line;
+    while(cin.good() && getline(cin, line, '\r')){
+        cout << "line='" << line << "'" <<endl;
+    }
+}
+void t_ctype(){
+    char ch;
+
+    ch = 255;
+    if(isspace(ch)){
+        printf("isSpace\n");
+    }
+    ch = -1;
+    if(isspace(ch)){
+        printf("isSpace\n");
+    }
+    ch = 0x81;
+    if(isspace(ch)){
+        printf("isSpace\n");
+    }
+    ch = 130;
+    if(isspace(ch)){
+        printf("isSpace\n");
+    }
+
+}
+void t_transfrom(){
+    std::string s="hello";
+    std::string out;
+    std::transform(s.begin(), s.end(), out.begin(), ::toupper);
+    std::cout << "hello in upper case: " << out << std::endl;
+}
 void t_enum() {
-	enum test{
-		v1,
-		v2,
-		v3,
-	};
+    enum test{
+        v1,
+        v2,
+        v3,
+    };
 }
 void t_string(){
-	using namespace std;
-	
-	NOTICE("sizeof(string)=%lu", sizeof(string));
-	NOTICE("sizeof(void *)=%lu", sizeof(void *));
+    using namespace std;
 
-	static union {
-		void * align;
-		char s[sizeof(string)];
-	} s[2];
+    NOTICE("sizeof(\"abc\")=%lu", sizeof("abc"));
+    string s = "123456";
+    cout << "(123456).find(45)" "pos=" << s.find("45") << endl;
+    cout << "(123456).find(123)" "pos=" << s.find("123") << endl;
 
-	string* const no = new(s[0].s) string("123457891111111111");
-	cout << *no <<endl;
-
-	char str[10]="aaaaa";
-	string *pstr = new(str) string("12345");
-	cout << *pstr <<endl;
-	NOTICE("str(p)=%p,str=%s\n", &str, str);
-	NOTICE("pstr  =%p\n", pstr);
+    cout << "(123456).erase(0,3):" << s.erase(0,sizeof("123")-1) <<endl;
+    NOTICE("sizeof(string)=%lu", sizeof(string));
+    NOTICE("sizeof(void *)=%lu", sizeof(void *));
+    string str1;
+    string str = str1;
+    printf("%s\n", str.c_str());
+    printf("%d\n", str.c_str()[0]);
+    if(strcasecmp(str.c_str(),"123")){
+    }
+    NOTICE("sizeof(void *)=%p", str.c_str());
+    str = "123";
+    NOTICE("sizeof(void *)=%p", str.c_str());
+    str.clear();
+    NOTICE("sizeof(void *)=%p", str.c_str());
 }
 void t_time(){
     time_t t1,t2;
@@ -59,7 +101,7 @@ void t_time(){
 
     t1 = PR_Now();
     for(int i=0;i<1000000;i++){
-	time(NULL);
+        time(NULL);
     }
     t2 = PR_Now();
 
@@ -68,7 +110,7 @@ void t_time(){
     struct timeval tv;
     t1 = PR_Now();
     for(int i=0;i<1000000;i++){
-	gettimeofday(&tv, 0);    
+        gettimeofday(&tv, 0);    
     }
     t2 = PR_Now();
     fprintf(stderr, "gettimeofday: t2-t1=%ldms\n", t2-t1);
