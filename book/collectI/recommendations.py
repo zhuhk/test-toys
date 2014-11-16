@@ -40,4 +40,20 @@ critics = {
       'You, Me and Dupree':2.0,
       'The Night Listener':3.0
    },
+  'Jack Matthews': {
+      'Lady in the warter':3.0,
+      'Snakes on a plane':4.0,
+      'Superman Returns':5.0,
+      'You, Me and Dupree':3.5,
+      'The Night Listener':3.0
+   },
+  'Toby': {
+      'Snakes on a plane':4.5,
+      'Superman Returns':4.0,
+      'You, Me and Dupree':1.0,
+   },
+  'Toby1': {
+      'Superman Returns':4.0,
+      'You, Me and Dupree':1.0,
+   },
 };
