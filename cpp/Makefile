@@ -19,9 +19,9 @@ CFLAGS = -D_GNU_SOURCE -g -pipe $(INCLUDE) \
 		  $(NULL)
 
 CXXFLAGS = $(CFLAGS) -Wno-deprecated 
-LDFLAGS	= $(LIB) -rdynamic
+LDFLAGS	= $(LIB) -rdynamic -lpthread
 
-target = t libmisc.a misc_ut spawn t_json t_lvdb
+target = t t2 libmisc.a misc_ut spawn t_json t_lvdb
 
 all: $(target) $(lib_target)
 	mkdir -p output
@@ -42,6 +42,9 @@ t_json: t_json.o
 	$(CXX) -o $@ $< $(LDFLAGS) 
 
 t_lvdb: t_lvdb.o 
+	$(CXX) -o $@ $< $(LDFLAGS) 
+
+t2: t2.o 
 	$(CXX) -o $@ $< $(LDFLAGS) 
 
 misc_ut: misc_ut.o libmisc.a 
