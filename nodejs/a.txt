@@ -1,0 +1,2 @@
+<script> document.write('<a href="http://abc.com/">anchor</a>');</script><a href="http://abc.com/">anchor</a>
+http://ent.qq.com/a/20140209/000517.htm
