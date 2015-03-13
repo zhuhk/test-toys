@@ -1,0 +1,84 @@
+<html>
+<head>
+	<style>
+		*{margin:0; padding:0; box-sizing:border-box;}
+		#mainWrapper {
+			min-width:600px; max-width:1100px;
+			margin:0 auto;
+			border:1px solid;
+
+		}
+		#col3Wrapper {
+			float:left;
+			width:100%;
+			background:#aaa;
+		}
+		#col2Wrapper {
+			float:left;
+			width:100%;
+			margin-right:-150px;
+		}
+		article { 
+			width:auto;
+			background:#ccc; 
+			padding:5px 10px;
+			margin-left:150px; margin-right:150px;
+		}
+		article .inner {
+			margin:2px;
+			padding:4px;
+		}
+		nav .inner,aside .inner { padding:10px;float:left; }
+		nav,aside { 
+			width:150px; 
+			float:left;
+			word-break:break-all;
+		}
+		nav li,aside li{ list-style-type:none; }		
+		header { 
+			font-size:20px;
+			padding:5px 10px;
+			background:#3f7ccf;
+			text-align:center;
+		}
+		footer { 
+			background:#bbb; 
+			clear:both;
+			text-align:center;
+		}
+</style>
+</head>	
+<body>
+	<div id="mainWrapper">
+		<header>This is Header.</header>
+		<div id="col3Wrapper">
+			<div id="col2Wrapper">
+				<nav>
+					<div class="inner">
+						<li>link-1</li>
+					  <li>link-2</li>
+					  <li>link-3</li>
+					  <p>link-벗벗가벗가벗가가가가가가가가가가가가가가가가가</p>
+				  </div>
+				</nav>
+			  <article><div class="inner">
+			 	  <h1>Typography</h1>
+				  <p>In traditional typography, text is composed to create a readable, coheren, and visually satisfying whole that works invisibly, without the awareness of the reader.</p>
+		
+			    <p>In traditional typography, text is composed to create a readable, coheren, and visually satisfying whole that works invisibly, without the awareness of the reader.</p>
+				  <h3>Type for every use</h3>
+			    <p>In traditional typography, text is composed to create a readable, coheren, and visually satisfying whole that works invisibly, without the awareness of the reader.</p>
+			  </div></article>
+			</div>
+		  <aside>
+		  	<div class="inner">
+			  	<li>link-4</li>
+			  	<li>link-5</li>
+			  	<li>link-6</li>
+		    </div>
+		  </aside>
+		</div>
+	  <footer>Here is footer</footer>
+	</div>
+</body>
+</html>
