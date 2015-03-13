@@ -15,22 +15,51 @@ void t_string();
 void t_enum();
 void t_ctype();
 void t_stream();
+void t_strtoul();
+
+#define TEST(func) \
+      void ut_ ## func();\
+  cout << "## ut_" << #func << endl;\
+  ut_ ## func();\
+  cout << endl
+
 using namespace std;
 int main(int argc, char**argv){
-    //printf("argc=%d\n",argc);
-    //t_ctype();
-    t_stream();
-    //t_string();
-    //    t_time();
+    TEST(mul);
+    //TEST(strtoul);
+    //TEST(time);
     return 0;
 }
-void t_stream(){
+
+void ut_mul(){
+    int v1 = 3000;
+    float v2 = 0.35;
+
+    printf("%d,%f\n", (int)(v1*v2), v1*v2);
+    v1 *= v2;
+    printf("%d\n",v1);
+    int32_t cnt = 1;
+    uint32_t ucnt = 1;
+    v2 = 1 - (cnt -2)*0.05;
+    printf("v2(int32):%f, v2(uint32):%f\n",v2, 1-(ucnt-2)*0.1);
+    v1 = 3000;
+    v1 *= v2;
+    printf("v1:%d\n",v1);
+}
+void ut_strtoul(){
+    string str;
+
+    str = "-1";
+    uint64_t val = strtoul(str.c_str(), NULL, 10);
+    cout << "val:" << val <<endl;
+}
+void ut_stream(){
     string line;
     while(cin.good() && getline(cin, line, '\r')){
         cout << "line='" << line << "'" <<endl;
     }
 }
-void t_ctype(){
+void ut_ctype(){
     char ch;
 
     ch = 255;
@@ -51,20 +80,20 @@ void t_ctype(){
     }
 
 }
-void t_transfrom(){
+void ut_transfrom(){
     std::string s="hello";
     std::string out;
     std::transform(s.begin(), s.end(), out.begin(), ::toupper);
     std::cout << "hello in upper case: " << out << std::endl;
 }
-void t_enum() {
+void ut_enum() {
     enum test{
         v1,
         v2,
         v3,
     };
 }
-void t_string(){
+void ut_string(){
     using namespace std;
 
     NOTICE("sizeof(\"abc\")=%lu", sizeof("abc"));
@@ -87,7 +116,7 @@ void t_string(){
     str.clear();
     NOTICE("sizeof(void *)=%p", str.c_str());
 }
-void t_time(){
+void ut_time(){
     time_t t1,t2;
     char strbuf[100]="123";
 

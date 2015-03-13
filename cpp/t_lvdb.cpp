@@ -10,6 +10,7 @@
 #include "misc.h"
 #include "third/leveldb/include/leveldb/db.h"
 
+using namespace std;
 int main(int argc, char**argv){
     leveldb::DB* db;
     leveldb::Options options;
@@ -17,7 +18,7 @@ int main(int argc, char**argv){
     leveldb::Status status = leveldb::DB::Open(options, "./testdb", &db);
     if(!status.ok()){
         WARNING("open(./testdb)failed.");
-        cerr << s.Tostring() << endl;
+        //cerr << s.Tostring() << endl;
         goto fail;
     }
     NOTICE("open succ");
