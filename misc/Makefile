@@ -5,15 +5,8 @@ include $(TOP_DIR)/misc/common.mk
 
 DEPTH = .
 
-INCLUDE = -I.. -I. -Wall -fPIC \
-  -Ithird/leveldb/include\
-  $(NULL)
-
 LIB = -L. -lmisc -lpthread -lm \
   $(NULL)
-
-CFLAGS += -D_GNU_SOURCE -g -pipe $(INCLUDE) \
-		  $(NULL)
 
 CXXFLAGS += $(CFLAGS) -Wno-deprecated 
 LDFLAGS	+= $(LIB) -rdynamic -lpthread

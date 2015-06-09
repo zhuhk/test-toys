@@ -2,7 +2,7 @@
 
 init:all
 
-CFLAGS = -g
+CFLAGS = -g -I. -Wall -fPIC -D_GNU_SOURCE 
 CXXFLAGS = -g
 LDFLAGS = -rdynamic
 
@@ -31,5 +31,7 @@ tags : $(wildcard *.cpp *.c *.h *.cc)
 
 %.o : %.c
 	$(CC) -c $< -o $@ $(CXXFLAGS) 
-%.o : %.cpp %.cc
+%.o : %.cc
+	$(CXX) -c $< -o $@ $(CXXFLAGS) 
+%.o : %.cpp 
 	$(CXX) -c $< -o $@ $(CXXFLAGS) 
