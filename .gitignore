@@ -1,5 +1,6 @@
 #files
 *.a
+*.d
 *.so
 *.o
 *_ut

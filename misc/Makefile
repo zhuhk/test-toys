@@ -14,7 +14,7 @@ LDFLAGS	+= $(LIB) -rdynamic -lpthread
 lib_target = libmisc.a
 target = misc_ut
 
-all: $(target) $(lib_target)
+all: $(DEP) $(target) $(lib_target)
 	rm -rf output
 	bash -c "mkdir -p output/{lib,include,bin}"
 	mv $(target) output/bin

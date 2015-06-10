@@ -7,6 +7,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+
 #define _LOG(SPEC,fmt, msg ...) \
     do{ \
 	char _strbuf[100];\
