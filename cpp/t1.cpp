@@ -4,30 +4,40 @@
 #include "misc.h"
 
 using namespace std;
-void func(){
+void func(int cnt){
   float a = 1.1 , b=1.2;
 
-  for(int i=0;i<100000;i++){
+  for(int i=0;i<cnt;i++){
     a *= b;
   }
 }
-int main(int argc, char**argv){
+void diff(int loopCnt, int cnt){
   time_t begin = PR_Now(), end;
 
-  for(int i=0;i<10;i++){
-    func();
+  cout << " + loopCnt=" << loopCnt << " cnt=" << cnt <<endl;
+  for(int i=0;i<loopCnt;i++){
+    func(cnt);
   }
 
   end = PR_Now();
-  cout << "normal:" << end - begin << "ms" <<endl;
+  cout << "   - serial:" << end - begin << "ms" <<endl;
   
   begin = end;
   #pragma omp parallel for
-  for(int i=0;i<10;i++){
-    func();
+  for(int i=0;i<loopCnt;i++){
+    func(cnt);
   }
   end = PR_Now();
-  cout << "openmp:" << end - begin << "ms" <<endl;
+  cout << "   - openmp:" << end - begin << "ms" <<endl;
+
+}
+int main(int argc, char**argv){
+  diff(1,10000);
+  diff(1,1000000);
+  diff(10,10000);
+  diff(10,1000000);
+  diff(1000000,10);
+  diff(10000,10000);
 
   return 0;
 }
