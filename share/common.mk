@@ -18,7 +18,7 @@ endef
 
 .PHONY: clean all init
 
-clean:
+clean_init:
 	@find . -name "*.o" |xargs rm -f
 	@find . -name "*.d" |xargs rm -f
 	@find . -name "tags" |xargs rm -f

@@ -1,7 +1,7 @@
 # $Id: Makefile, zhuhk Exp $
 
 TOP_DIR := $(shell cd .. && pwd)
-include $(TOP_DIR)/misc/common.mk
+include $(TOP_DIR)/share/common.mk
 
 DEPTH = .
 
@@ -17,9 +17,12 @@ target = misc_ut
 all: $(DEP) $(target) $(lib_target)
 	rm -rf output
 	bash -c "mkdir -p output/{lib,include,bin}"
-	mv $(target) output/bin
-	mv $(lib_target) output/lib
+	cp $(target) output/bin
+	cp $(lib_target) output/lib
 	cp *.h output/include
+
+clean: clean_init
+	rm -f $(target) $(lib_target)
 
 libmisc.a : misc.o testharness.o
 	$(gen-static-lib)
