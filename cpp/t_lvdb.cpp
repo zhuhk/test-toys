@@ -8,7 +8,7 @@
 #include <iostream>
 #include <algorithm>
 #include "misc.h"
-#include "third/leveldb/include/leveldb/db.h"
+#include "leveldb/db.h"
 
 using namespace std;
 int main(int argc, char**argv){

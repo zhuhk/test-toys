@@ -1,42 +1,40 @@
 #
-# Makefile
-#
 # $Id: Makefile, zhuhk Exp $
 #
 
-DEPTH = .
+TOP_DIR := $(shell cd .. && pwd)
+include $(TOP_DIR)/share/common.mk
 
-INCLUDE = -I.. -I. -Wall -fPIC \
-  -Ithird/leveldb/include\
+LIB = -L$(SHARE_DIR) -lmisc -lpthread -lm \
+  -L$(THIRD_DIR)/leveldb/lib -lleveldb -lsnappy\
+  -L$(THIRD_DIR)/jsoncpp/lib -ljsoncpp\
   $(NULL)
 
-LIB = -L. -lmisc -lpthread -lm \
-  -Lthird/jsoncpp/lib -ljsoncpp\
-  -Lthird/leveldb/lib -lleveldb\
-  $(NULL)
-
-CFLAGS = -D_GNU_SOURCE -g -pipe $(INCLUDE) \
+CFLAGS = -I$(THIRD_DIR)/leveldb/include \
+		 -I$(THIRD_DIR)/jsoncpp/include \
 		  $(NULL)
 
 CXXFLAGS = $(CFLAGS) -Wno-deprecated 
 LDFLAGS	= $(LIB) -rdynamic -lpthread
 
-target = t t2 libmisc.a misc_ut spawn t_json t_lvdb
+target = t t1 t2 spawn t_lvdb
 
-all: $(target) $(lib_target)
+external:
+	make -C $(SHARE_DIR)
+
+all: external $(target) 
 	mkdir -p output
 	cp $(target) output
 	cp *.h output
 
-libmisc.a : misc.o testharness.o
-	ar cr $@ $^
-	ranlib $@
-
 spawn : spawn.o
 	$(CXX) -o $@ $< $(LDFLAGS) 
 
-t: t.o libmisc.a
+t: t.o
 	$(CXX) -o $@ $< $(LDFLAGS) 
+
+t1: t1.cpp
+	$(CXX) -o $@ $< -fopenmp $(LDFLAGS) 
 
 t_json: t_json.o 
 	$(CXX) -o $@ $< $(LDFLAGS) 
@@ -50,10 +48,8 @@ t2: t2.o
 misc_ut: misc_ut.o libmisc.a 
 	$(CXX) -o $@ $< $(LDFLAGS) 
 
-clean:
+clean: clean_init
 	rm -rf *.o *~ *.orig core.* $(target) output
 
-tags : $(wildcard *.cpp *.c *.h *.cc)
-	ctags $^
-
+-include $(DEP)
 # EOF

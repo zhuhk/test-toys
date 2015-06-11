@@ -11,6 +11,11 @@ MAKE = make
 CXX = g++
 AR = ar
 
+ifdef TOP_DIR
+  THIRD_DIR=$(TOP_DIR)/third
+  SHARE_DIR=$(TOP_DIR)/share
+endif
+
 define gen-static-lib
   $(AR) cr $@ $^
   ranlib $@
@@ -19,6 +24,7 @@ endef
 .PHONY: clean all init
 
 clean_init:
+	@find . -name "*.a" |xargs rm -f
 	@find . -name "*.o" |xargs rm -f
 	@find . -name "*.d" |xargs rm -f
 	@find . -name "tags" |xargs rm -f
@@ -38,17 +44,17 @@ tags : $(wildcard *.cpp *.c *.h *.cc)
 	$(CXX) -c $< -o $@ $(CXXFLAGS) 
 
 define gen-deps
-  @set -e; rm -f $@; \
-  $(CXX) -MM $(CPPFLAGS) $< > $@.$$$$; \
-  sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ >$@; \
-  rm -f $@.$$$$
+  @rm -f $@; \
+  $(CXX) -MM $(CFLAGS) $(CXXFLAGS) $< >$$$$.$@; \
+  sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $$$$.$@ >$@; \
+  rm -f $$$$.$@
 endef
 
 SRC = $(wildcard *.c *.cpp *.cc)
 DEP := $(SRC:.c=.d)
 DEP := $(DEP:.cpp=.d)
 DEP := $(DEP:.cc=.d)
--include $(DEP)
+#-include $(DEP)
 
 %.d: %.cpp
 	$(gen-deps)

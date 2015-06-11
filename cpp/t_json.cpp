@@ -10,7 +10,7 @@
 #include <fstream>
 
 #include "misc.h"
-#include "third/jsoncpp/include/json.h"
+#include "json/json.h"
 
 using namespace Json;
 using namespace std;

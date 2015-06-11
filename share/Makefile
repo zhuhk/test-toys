@@ -30,4 +30,5 @@ libmisc.a : misc.o testharness.o
 misc_ut: misc_ut.o libmisc.a 
 	$(CXX) -o $@ $< $(LDFLAGS) 
 
+-include $(DEP)
 # EOF
