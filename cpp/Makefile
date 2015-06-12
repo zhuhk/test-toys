@@ -14,9 +14,7 @@ CFLAGS = -I$(THIRD_DIR)/leveldb/include \
 		 -I$(THIRD_DIR)/jsoncpp/include \
 		  $(NULL)
 
-CXXFLAGS = $(CFLAGS) -Wno-deprecated 
-LDFLAGS	= $(LIB) -rdynamic -lpthread
-
+LDFLAGS := $(LIB) -rdynamic -lpthread
 target = t t1 t2 t3 spawn t_lvdb dynlib_main dynlib.so dynlib1.so
 
 external:
