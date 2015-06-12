@@ -17,7 +17,7 @@ CFLAGS = -I$(THIRD_DIR)/leveldb/include \
 CXXFLAGS = $(CFLAGS) -Wno-deprecated 
 LDFLAGS	= $(LIB) -rdynamic -lpthread
 
-target = t t1 t2 spawn t_lvdb
+target = t t1 t2 spawn t_lvdb dynlib_main dynlib.so dynlib1.so
 
 external:
 	make -C $(SHARE_DIR)
@@ -29,6 +29,15 @@ all: external $(target)
 
 spawn : spawn.o
 	$(CXX) -o $@ $< $(LDFLAGS) 
+
+## -fpic is equal to -fPIC
+dynlib.so : dynlib.cpp dynlib.h
+	$(CXX) -o $@ $< -fpic -shared
+dynlib1.so : dynlib1.cpp
+	$(CXX) -o $@ $< -fPIC -shared
+
+dynlib_main : dynlib_main.o
+	$(CXX) -o $@ $< $(LDFLAGS) -ldl
 
 t: t.o
 	$(CXX) -o $@ $< $(LDFLAGS) 
@@ -51,5 +60,5 @@ misc_ut: misc_ut.o libmisc.a
 clean: clean_init
 	rm -rf *.o *~ *.orig core.* $(target) output
 
--include $(DEP)
+#-include $(DEP)
 # EOF
