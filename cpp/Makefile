@@ -13,9 +13,9 @@ LIB = -L$(SHARE_DIR) -lmisc -lpthread -lm \
 CFLAGS = -I$(THIRD_DIR)/leveldb/include \
 		 -I$(THIRD_DIR)/jsoncpp/include \
 		  $(NULL)
-
+CXXFLAGS = $(CFLAGS)
 LDFLAGS := $(LIB) -rdynamic -lpthread
-target = t t1 t2 t3 spawn t_lvdb dynlib_main dynlib.so dynlib1.so
+target = t t1 t2 t3 spawn dynlib_main dynlib.so dynlib1.so
 
 external:
 	make -C $(SHARE_DIR)
