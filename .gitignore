@@ -1,5 +1,6 @@
 #files
-*.a
+cpp/*.a
+share/*.a
 *.d
 *.so
 *.o
