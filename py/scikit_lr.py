@@ -28,4 +28,5 @@ logisticRegression.fit(train_features, train_targets)
 # Predict
 predict_targets = logisticRegression.predict(test_features) 
 predict_probs = logisticRegression.predict_proba(test_features) 
+print logisticRegression.score(test_features,test_targets)
 
