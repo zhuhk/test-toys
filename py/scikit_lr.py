@@ -54,6 +54,5 @@ for i in range(n_classes):
   plt.xlim([0.0, 1.0])
   plt.title('Precision-Recall example')
   plt.legend(loc="lower left")
-#plt.show()
   plt.savefig('myfig' + str(i))
-
+ #plt.show()
