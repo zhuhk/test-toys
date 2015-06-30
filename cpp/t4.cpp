@@ -21,6 +21,7 @@ class Base{
       COUT << "destruct Base id:" << id_ << endl;
     }
     int id_;
+    void *p;
 };
 
 class Sub:public Base{
@@ -47,7 +48,7 @@ void Ref(int id){
 }
 int main () {
   Ref(1);
-  shared_ptr<Sub> p1 = static_pointer_cast<Sub>(bases[0]);
+  shared_ptr<Sub> p1 = dynamic_pointer_cast<Sub>(bases[0]);
   COUT << "use count:" << bases[0].use_count() << endl;
   Ref(2);
   COUT << "use count:" << bases[0].use_count() << endl;
