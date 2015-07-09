@@ -42,3 +42,6 @@ int dynlib_func2(){
 void same_func(){
   NOTICE("");
 }
+void same1_func(){
+  NOTICE("");
+}
