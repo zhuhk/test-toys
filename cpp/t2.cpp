@@ -7,6 +7,7 @@
 #include <map>
 #include <sys/time.h>
 #include <math.h>
+#include <vector>
 
 using namespace std;
 
@@ -54,6 +55,16 @@ void t_map(){
   dict[1]++;
   cout << dict[1] <<endl;
 }
+void t_vec(){
+  vector<uint64_t> dict;
+  for(int i=0; i<1000000; i++){
+    dict.push_back(i);
+    if(i % 10000 == 0){
+      cout << &dict[0] <<endl;
+    }
+  }
+}
+
 
 void t_memmove(){
   char buff[10];
@@ -195,6 +206,8 @@ void t_log10f(){
   cout << "logf*100w:" << Now() - begin << "ms" <<endl;
 }
 int main(){
+  t_vec();
+  return 0;
   t_log10f();
   return 0;
   t_mktime();
