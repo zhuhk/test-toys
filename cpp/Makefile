@@ -2,7 +2,7 @@
 # $Id: Makefile, zhuhk Exp $
 #
 
-TOP_DIR := $(shell cd .. && pwd)
+TOP_DIR := ..
 include $(TOP_DIR)/share/common.mk
 
 LIB = -L$(SHARE_DIR) -lmisc -lpthread -lm \
@@ -45,7 +45,7 @@ t: t.o
 	$(CXX) -o $@ $< $(LDFLAGS) 
 
 t_c11: t_c11.cpp
-	$(CXX) -o $@ $<  -std=c++11 -lpthread
+	$(CXX) -o $@ $<  -std=c++11 -I$(SHARE_DIR) -L$(SHARE_DIR) -lmisc -lpthread
 
 t4: t4.cpp
 	$(CXX) -o $@ $<  -std=c++11 -lpthread
