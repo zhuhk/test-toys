@@ -5,17 +5,10 @@
 #include <vector>
 #include <atomic>
 #include <mutex>
+#include <future>
 #include "misc.h"
 
 using namespace std;
-std::promise<int> prom;
-
-void print_global_promise () {
-  std::future<int> fut = prom.get_future();
-  int x = fut.get();
-  std::cout << "value: " << x << '\n';
-}
-
 
 int async_run(int i){
   cout << "threadId " << std::this_thread::get_id() << " id" << i << endl;
@@ -107,24 +100,32 @@ void test_atomic(){
   }
   cout << "atomic3 - time:" << PR_Now() - begin << "ms " << "total:" << total1 <<endl;
 }
+
+shared_future<bool> fut;
+promise<bool> prom;
+void fut_get(){
+  bool ret = fut.get();
+  NOTICE("ret=%d", ret);
+  NOTICE("ret=%d", fut.get());
+}
+void t_future(){
+  prom = promise<bool>();
+  fut = prom.get_future();
+  thread t1(fut_get), t2(fut_get), t3(fut_get);
+  sleep(1);
+  prom.set_value(false);
+  t1.join();
+  t2.join();
+  t3.join();
+}
+
 int main () {
+  t_future();
+  t_future();
+  return 0;
+
   test_atomic();
   return 0;
   test_async();
-  return 0;
-
-  std::thread th1(print_global_promise);
-  std::cout << "sleep 3s" <<endl;
-  sleep(1);
-  prom.set_value(10);
-  th1.join();
-
-  prom = std::promise<int>();    // prom 被move赋值为一个新的 promise 对象.
-
-  std::thread th2 (print_global_promise);
-  sleep(1);
-  prom.set_value (20);
-  th2.join();
-
   return 0;
 }
