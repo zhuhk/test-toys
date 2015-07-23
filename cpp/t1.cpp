@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <iostream>
+#include <map>
+#include <set>
 #include "misc.h"
 
 using namespace std;
@@ -31,7 +34,20 @@ void diff(int loopCnt, int cnt){
   cout << "   - openmp:" << end - begin << "ms" <<endl;
 
 }
+
+void t_set(){
+  set<uint64_t> list;
+  for(int i=0; i<20; i++){
+    list.insert(random());
+  }
+  set<uint64_t>::iterator it;
+  for(it = list.begin(); it != list.end(); it++){
+    cout << *it << endl;
+  }
+}
 int main(int argc, char**argv){
+  t_map();
+  return 0;
   diff(1,10000);
   diff(1,1000000);
   diff(10,10000);
