@@ -46,7 +46,7 @@ void t_set(){
   }
 }
 int main(int argc, char**argv){
-  t_map();
+  t_set();
   return 0;
   diff(1,10000);
   diff(1,1000000);

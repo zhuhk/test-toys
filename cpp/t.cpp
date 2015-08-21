@@ -10,13 +10,6 @@
 #include <algorithm>
 #include "misc.h"
 
-void t_time();
-void t_string();
-void t_enum();
-void t_ctype();
-void t_stream();
-void t_strtoul();
-
 #define TEST(func) \
       void ut_ ## func();\
   cout << "## ut_" << #func << endl;\
@@ -25,12 +18,23 @@ void t_strtoul();
 
 using namespace std;
 int main(int argc, char**argv){
+    TEST(int);
     TEST(mul);
+    TEST(string);
     //TEST(strtoul);
     //TEST(time);
     return 0;
 }
 
+void ut_int(){
+  int32_t v = -5;
+  int32_t v1 = v % 3;
+  cout << "-5 % 3:" << v1 <<endl;
+  
+  v = 5;
+  v1 = v % 3;
+  cout << "5 % 3:" << v1 <<endl;
+}
 void ut_mul(){
     int v1 = 3000;
     float v2 = 0.35;
@@ -95,6 +99,10 @@ void ut_enum() {
 }
 void ut_string(){
     using namespace std;
+
+    string s1 = "abc123";
+    s1 = s1.substr(0,3);
+    cout << s1 <<endl;
 
     NOTICE("sizeof(\"abc\")=%lu", sizeof("abc"));
     string s = "123456";

@@ -5,6 +5,7 @@
 #include <vector>
 #include <atomic>
 #include <mutex>
+#include <set>
 #include <future>
 #include "misc.h"
 
@@ -119,7 +120,20 @@ void t_future(){
   t3.join();
 }
 
+void t_set_del(){
+  set<uint64_t> values;
+
+  for(uint64_t i=0; i<10; i++){
+    values.insert(i);
+  }
+  for(set<uint64_t>::iterator it=values.begin(); it!=values.end();){
+    printf("%lu\n", *it);
+    values.erase(it++);
+  }
+}
 int main () {
+  t_set_del();
+  return 0;
   t_future();
   t_future();
   return 0;
