@@ -6,7 +6,7 @@ TOP_DIR := ..
 include $(TOP_DIR)/share/common.mk
 
 LIB = -L$(SHARE_DIR) -lmisc -lpthread -lm \
-  -L$(THIRD_DIR)/leveldb/lib -lleveldb -lsnappy\
+  -L$(THIRD_DIR)/leveldb/lib -lleveldb \
   -L$(THIRD_DIR)/jsoncpp/lib -ljsoncpp\
   $(NULL)
 
