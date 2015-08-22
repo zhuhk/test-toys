@@ -15,7 +15,7 @@ CFLAGS = -g -fPIC -I$(THIRD_DIR)/leveldb/include \
 		  $(NULL)
 CXXFLAGS = $(CFLAGS)
 LDFLAGS := $(LIB) -rdynamic -lpthread
-target = t t1 t2 t_c11 t4 t_ev spawn dynlib_main dynlib.so dynlib1.so dynlib2.so
+target = t t1 t2 t_c11 t4 t_ev spawn dynlib_main dynlib.so dynlib1.so.1 dynlib1.so.2
 
 external:
 	make -C $(SHARE_DIR)
@@ -24,6 +24,7 @@ all: external $(target)
 	mkdir -p output
 	cp $(target) output
 	cp *.h output
+	ln -sf dynlib1.so.1 dynlib_1.so
 
 spawn : spawn.o
 	$(CXX) -o $@ $< $(LDFLAGS) 
@@ -31,7 +32,9 @@ spawn : spawn.o
 ## -fpic is equal to -fPIC
 dynlib.so : dynlib.cpp dynlib.h
 	$(CXX) -o $@ $< -Wl,-soname,$@ -fpic -shared
-dynlib1.so : dynlib1.cpp
+dynlib1.so.1 : dynlib1.cpp
+	$(CXX) -o $@ $< -Wl,-soname,$@ -fpic -shared
+dynlib1.so.2 : dynlib1_2.cpp
 	$(CXX) -o $@ $< -Wl,-soname,$@ -fpic -shared
 dynlib2.so : dynlib2.cpp
 	$(CXX) -o $@ $< -Wl,-soname,dynlib1.so -fpic -shared
@@ -66,7 +69,7 @@ misc_ut: misc_ut.o libmisc.a
 	$(CXX) -o $@ $< $(LDFLAGS) 
 
 clean: clean_init
-	rm -rf *.o *~ *.orig core.* $(target) output
+	rm -rf *.so *.o *~ *.orig core.* $(target) output
 
 #-include $(DEP)
 # EOF

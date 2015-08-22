@@ -17,7 +17,7 @@ extern std::map<std::string, BaseResource*> resources;
 // funtions export from dynamic libs
 extern "C" int dynlib_func();
 extern "C" int dynlib_func2();
-extern "C" int dynlib1_func();
+extern "C" int dynlib1_func1();
 extern "C" int dyn_init();
 
 // function used or defined by lib

@@ -32,3 +32,7 @@ int dynlib1_func(){
 void same_func(){
   NOTICE("");
 }
+int dynlib1_func1(){
+  NOTICE("from dynlib1");
+  return 0;
+}

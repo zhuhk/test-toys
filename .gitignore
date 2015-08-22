@@ -2,6 +2,8 @@
 cpp/*.a
 share/*.a
 *.d
+*.png
+*.pyc
 *.so
 *.o
 *_ut

@@ -11,7 +11,7 @@
     do{ \
 	char _strbuf[100];\
 	strtime(time(NULL), _strbuf, sizeof(_strbuf));\
-	fprintf(stderr, "%s %s (%s:%d:%d) " fmt "\n", SPEC, _strbuf,  __FILE__":"__FUNCTION__, __LINE__,  getpid(), ##msg); \
+	fprintf(stderr, "%s %s (%s:%s:%d) " fmt "\n", SPEC, _strbuf,  __FILE__, __FUNCTION__, __LINE__, ##msg); \
     }while(0)
 #define NOTICE(fmt, msg ...) _LOG("NOTICE", fmt, ##msg)
 #define WARNING(fmt, msg ...) _LOG("WARNING", fmt, ##msg)
