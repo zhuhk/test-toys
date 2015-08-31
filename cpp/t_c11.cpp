@@ -131,7 +131,33 @@ void t_set_del(){
     values.erase(it++);
   }
 }
+void t_vec(){
+  vector<int> v;
+  for(int i=0; i<10; i++){
+    v.push_back(i);
+  }
+
+  for(auto i : v){
+    cout << i << endl;
+    i = 3;
+  }
+
+  for(int i=0; i<10; i++){
+    cout << "after " << v[i] <<endl;
+  }
+
+  for(auto& i : v){
+    cout << i << endl;
+    i = 3;
+  }
+
+  for(int i=0; i<10; i++){
+    cout << "after " << v[i] <<endl;
+  }
+}
 int main () {
+  t_vec();
+  return 0;
   t_set_del();
   return 0;
   t_future();

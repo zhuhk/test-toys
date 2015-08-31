@@ -15,7 +15,7 @@ CFLAGS = -g -fPIC -I$(THIRD_DIR)/leveldb/include \
 		  $(NULL)
 CXXFLAGS = $(CFLAGS)
 LDFLAGS := $(LIB) -rdynamic -lpthread
-target = t t1 t2 t_c11 t4 t_ev spawn dynlib_main dynlib.so dynlib1.so.1 dynlib1.so.2
+target = t t1 t2 t_c11 t4 t_ev spawn dynlib_main dynlib.so dynlib1.so.1
 
 external:
 	make -C $(SHARE_DIR)
