@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <iostream>
 #include <vector>
 #include <dlfcn.h>
@@ -15,6 +16,32 @@ vector<int> vec;
 int main(int, char**argv){
   vec.push_back(1);
 
+  NOTICE("++ test for same sym which link to two so");
+  func_t funcSame = NULL;
+  unlink("dynlibSym.so");
+  symlink("./dynlib2.so", "dynlibSym.so");
+  void * handleB = dlopen("./dynlibSym.so", RTLD_NOW|RTLD_GLOBAL|RTLD_DEEPBIND);
+  if(handleB == NULL){
+    NOTICE("dlopen(dynlibSym.so)failed. msg:%m");
+    return 0;
+  }
+  funcSame = (func_t)dlsym(handleB,"same_func");
+  if(funcSame == NULL){
+    NOTICE("dlsym(handleB, same_func)failed. %m");
+    return 0;
+  }
+  funcSame();
+
+  unlink("dynlibSym.so");
+  symlink("./dynlib.so", "dynlibSym.so");
+  void * handleA = dlopen("./dynlibSym.so", RTLD_NOW|RTLD_GLOBAL|RTLD_DEEPBIND);
+  dlclose(handleB);
+  funcSame = (func_t)dlsym(handleA,"same_func");
+  if(funcSame == NULL){
+    NOTICE("dlsym(handleA, same_func)failed. %m");
+    return 0;
+  }
+  funcSame();
   void * handle = dlopen("./dynlib.so", RTLD_NOW|RTLD_GLOBAL);
  // void * handle = dlopen("./dynlib.so", RTLD_LAZY);
   if(handle == NULL){
@@ -95,6 +122,7 @@ quit:
   return -1;
 }
 
-void main_func(){
+int main_func(){
   NOTICE("");
+  return 0;
 }

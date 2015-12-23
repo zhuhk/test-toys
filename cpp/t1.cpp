@@ -45,7 +45,19 @@ void t_set(){
     cout << *it << endl;
   }
 }
+
+void t_readlink(){
+  symlink("./t1", "./ref.t1");
+  char buf[256];
+  int len = readlink("./ref.t1", buf, sizeof(buf));
+  if(len>=0){
+    buf[len] = 0;
+  }
+  printf("buf=%s.\n", buf);
+}
 int main(int argc, char**argv){
+  t_readlink();
+  return 0;
   t_set();
   return 0;
   diff(1,10000);

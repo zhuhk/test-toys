@@ -19,10 +19,11 @@ extern "C" int dynlib_func();
 extern "C" int dynlib_func2();
 extern "C" int dynlib1_func1();
 extern "C" int dyn_init();
+extern "C" int same_func();
 
 // function used or defined by lib
-extern void main_func();
-extern void same_func();
+extern int main_func();
+extern int same_func();
 extern int dynlib_func1();
 
 typedef int (*func_t)();

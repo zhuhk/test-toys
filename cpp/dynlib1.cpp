@@ -29,8 +29,9 @@ int dynlib1_func(){
   resources["dynlib2"] = res;
   return 0;
 }
-void same_func(){
+extern int same_func(){
   NOTICE("");
+  return 0;
 }
 int dynlib1_func1(){
   NOTICE("from dynlib1");
