@@ -39,7 +39,14 @@ int dynlib_func2(){
   }
   return 0;
 }
+class Test{
+  public:
+ Test(){
+   NOTICE("");
+ }
+};
 extern int same_func(){
+  Test * t = new Test();
   NOTICE("");
   return 0;
 }

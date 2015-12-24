@@ -18,6 +18,14 @@ int main(int, char**argv){
 
   NOTICE("++ test for same sym which link to two so");
   func_t funcSame = NULL;
+  void * handleC = dlopen("./dynlib.so", RTLD_NOW|RTLD_GLOBAL|RTLD_DEEPBIND);
+  funcSame = (func_t)dlsym(handleC,"same_func");
+  funcSame();
+
+  void * handleD = dlopen("./dynlib2.so", RTLD_NOW|RTLD_GLOBAL|RTLD_DEEPBIND);
+  funcSame = (func_t)dlsym(handleD,"same_func");
+  funcSame();
+
   unlink("dynlibSym.so");
   symlink("./dynlib2.so", "dynlibSym.so");
   void * handleB = dlopen("./dynlibSym.so", RTLD_NOW|RTLD_GLOBAL|RTLD_DEEPBIND);

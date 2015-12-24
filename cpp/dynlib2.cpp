@@ -10,6 +10,12 @@ using namespace std;
 
 map<string, BaseResource*> resources;
 
+class Test{
+  public:
+ Test(){
+   NOTICE("");
+ }
+};
 int dynlib_func(){
   NOTICE("from dynlib_func()");
   NOTICE("call main_func()");
@@ -40,6 +46,7 @@ int dynlib_func2(){
   return 0;
 }
 extern int same_func(){
+  Test * t = new Test();
   NOTICE("");
   return 0;
 }

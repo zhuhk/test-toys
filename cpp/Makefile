@@ -31,15 +31,15 @@ spawn : spawn.o
 
 ## -fpic is equal to -fPIC
 dynlib.so : dynlib.cpp dynlib.h
-	$(CXX) -o $@ $< -Wl,-soname,$@ -fpic -shared
+	$(CXX) -o $@ $< -Wl,-soname,$@ -fpic -shared $(CXXFLAGS)
 dynlib2.so : dynlib2.cpp dynlib.h
-	$(CXX) -o $@ $< -Wl,-soname,$@ -fpic -shared
+	$(CXX) -o $@ $< -Wl,-soname,$@ -fpic -shared $(CXXFLAGS)
 dynlib1.so.1 : dynlib1.cpp
-	$(CXX) -o $@ $< -Wl,-soname,$@ -fpic -shared
+	$(CXX) -o $@ $< -Wl,-soname,$@ -fpic -shared $(CXXFLAGS)
 dynlib1.so.2 : dynlib1_2.cpp
-	$(CXX) -o $@ $< -Wl,-soname,$@ -fpic -shared
+	$(CXX) -o $@ $< -Wl,-soname,$@ -fpic -shared $(CXXFLAGS)
 dynlib2.so : dynlib2.cpp
-	$(CXX) -o $@ $< -Wl,-soname,dynlib1.so -fpic -shared
+	$(CXX) -o $@ $< -Wl,-soname,dynlib1.so -fpic -shared $(CXXFLAGS)
 
 dynlib_main : dynlib_main.o
 	$(CXX) -o $@ $< $(LDFLAGS) -ldl
