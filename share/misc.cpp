@@ -3,7 +3,7 @@
 time_t PR_Now() {    
     struct timeval tv;    
     gettimeofday(&tv, 0);    
-    return (tv.tv_sec*1000 + tv.tv_usec/1000);
+    return (tv.tv_sec*1000000 + tv.tv_usec);
 }
 
 extern const char*strtime(time_t t, char *buf, int buflen){

@@ -10,11 +10,11 @@ LIB = -L$(SHARE_DIR) -lmisc -lpthread -lm \
   -L$(THIRD_DIR)/jsoncpp/lib -ljsoncpp\
   $(NULL)
 
-CFLAGS = -g -fPIC -I$(THIRD_DIR)/leveldb/include \
+CFLAGS = -g -fPIC -I$(THIRD_DIR)/leveldb/include -I../share\
 		 -I$(THIRD_DIR)/jsoncpp/include \
 		  $(NULL)
 CXXFLAGS = $(CFLAGS)
-LDFLAGS := $(LIB) -rdynamic -lpthread
+LDFLAGS := $(LIB) -rdynamic -lpthread $(CXXFLAGS)
 target = t t1 t2 t_c11 t4 t_ev spawn dynlib_main dynlib.so dynlib2.so dynlib1.so.1
 
 external:
@@ -56,7 +56,7 @@ t4: t4.cpp
 	$(CXX) -o $@ $<  -std=c++11 -lpthread
 
 t1: t1.cpp
-	$(CXX) -o $@ $< -fopenmp $(LDFLAGS) 
+	$(CXX) -o $@ $< -std=c++11 -fopenmp $(LDFLAGS) 
 
 t_json: t_json.o 
 	$(CXX) -o $@ $< $(LDFLAGS) 
