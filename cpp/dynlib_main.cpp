@@ -17,17 +17,24 @@ int main(int, char**argv){
   vec.push_back(1);
 
   NOTICE("++ test for same sym which link to two so");
-  func_t funcSame = NULL;
+  funcRes_t funcSame = NULL;
   void * handleC = dlopen("./dynlib.so", RTLD_NOW|RTLD_GLOBAL|RTLD_DEEPBIND);
  // void * handleC = dlopen("./dynlib.so", RTLD_NOW|RTLD_GLOBAL);
-  funcSame = (func_t)dlsym(handleC,"same_func");
-  funcSame();
+  funcSame = (funcRes_t)dlsym(handleC,"same_func");
+  BaseResource *res = funcSame();
+  printf("%s\n", res->name.c_str());
+  res->name = "123111111111111111111111111111111111111111111111111111111111111111111111";
+  printf("%s\n", res->name.c_str());
+  res->load();
 
-  void * handleD = dlopen("./dynlib2.so", RTLD_NOW|RTLD_GLOBAL|RTLD_DEEPBIND);
+  void * handleD = dlopen("./dynlib_1.so", RTLD_NOW|RTLD_GLOBAL|RTLD_DEEPBIND);
  // void * handleD = dlopen("./dynlib2.so", RTLD_NOW|RTLD_GLOBAL);
-  funcSame = (func_t)dlsym(handleD,"same_func");
-  funcSame();
-
+  funcSame = (funcRes_t)dlsym(handleD,"same_func");
+  res = funcSame();
+  res->name = "abc";
+  printf("%s\n", res->name.c_str());
+  return 0;
+/*
   unlink("dynlibSym.so");
   symlink("./dynlib2.so", "dynlibSym.so");
   void * handleB = dlopen("./dynlibSym.so", RTLD_NOW|RTLD_GLOBAL|RTLD_DEEPBIND);
@@ -130,6 +137,7 @@ quit:
     dlclose(lib1_handle1);
   }
   return -1;
+  */
 }
 
 int main_func(){

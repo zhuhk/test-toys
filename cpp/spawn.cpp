@@ -201,11 +201,11 @@ int main (int argc, char *argv[])
 				  return 0;
 			  }
 			  char buf[5210]="";
-			  read(fd_recv, buf,sizeof(buf));
+			  int tmplen = read(fd_recv, buf,sizeof(buf));
 			  printf("*** DATA Begin***\n%s\n+++ DATA End\n",buf);
 			  int len = snprintf(buf,sizeof(buf),"HTTP/1.1 200 OK\r\n\r\nsuccess. fid=%u, pid=%d\n", fd_recv, getpid());
 
-			  write(fd_recv, buf, len);
+			  tmplen = write(fd_recv, buf, len);
 			  close(fd_recv);
 			  sleep(1);
 		  }

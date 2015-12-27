@@ -4,6 +4,10 @@
 #include "dynlib.h"
 
 class Resource : public BaseResource{
+  public:
+  Resource(){
+    name = __FILE__;
+  }
   void load(){
     NOTICE("load in Resource");
   }
@@ -29,9 +33,9 @@ int dynlib1_func(){
   resources["dynlib2"] = res;
   return 0;
 }
-extern int same_func(){
-  NOTICE("");
-  return 0;
+extern BaseResource* same_func(){
+  NOTICE("dynlib1.cpp");
+  return new Resource();
 }
 int dynlib1_func1(){
   NOTICE("from dynlib1");

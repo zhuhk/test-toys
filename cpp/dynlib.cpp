@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <pthread.h>
 #include <map>
+#include <string>
 
 #include "misc.h"
 
@@ -9,6 +10,22 @@
 using namespace std;
 
 map<string, BaseResource*> resources;
+
+class Resource : public BaseResource{
+  string data;
+  vector<int> d;
+  public:
+  Resource(){
+    name = __FILE__;
+  }
+  void load(){
+    NOTICE("load in Resource");
+    for(int i=0;i<10000000;i++){
+      data.append(to_string(i));
+      d.push_back(i);
+    }
+  }
+};
 
 int dynlib_func(){
   NOTICE("from dynlib_func()");
@@ -39,17 +56,16 @@ int dynlib_func2(){
   }
   return 0;
 }
+extern BaseResource* same_func(){
+  NOTICE("dynlib.cpp");
+  return new Resource();
+}
 class Test{
   public:
  Test(){
    NOTICE("");
  }
 };
-extern int same_func(){
-  Test * t = new Test();
-  NOTICE("");
-  return 0;
-}
 void same1_func(){
   NOTICE("");
 }

@@ -10,12 +10,13 @@ LIB = -L$(SHARE_DIR) -lmisc -lpthread -lm \
   -L$(THIRD_DIR)/jsoncpp/lib -ljsoncpp\
   $(NULL)
 
-CFLAGS = -g -O2 -fPIC -I$(THIRD_DIR)/leveldb/include -I../share\
+CFLAGS = -std=c++11 -g -O2 -fPIC -Wunused-result -I$(THIRD_DIR)/leveldb/include -I../share\
 		 -I$(THIRD_DIR)/jsoncpp/include \
 		  $(NULL)
 CXXFLAGS = $(CFLAGS)
+CPPFLAGS = $(CFLAGS)
 LDFLAGS := $(LIB) -rdynamic -lpthread $(CXXFLAGS)
-target = t t1 t2 t_c11 t4 t_ev spawn dynlib_main dynlib.so dynlib2.so dynlib1.so.1
+target = t t1 t2 t_c11 t4 t_ev spawn dynlib_main dynlib.so dynlib1.so.1
 
 external:
 	make -C $(SHARE_DIR)
@@ -42,7 +43,7 @@ dynlib2.so : dynlib2.cpp
 	$(CXX) -o $@ $< -Wl,-soname,dynlib1.so -fpic -shared $(CXXFLAGS)
 
 dynlib_main : dynlib_main.o
-	$(CXX) -o $@ $< $(LDFLAGS) -ldl
+	$(CXX) -o $@ $< $(LDFLAGS) -ldl -L/usr/lib -ltcmalloc
 
 t_ev: t_ev.o
 	$(CXX) -o $@ $< $(LDFLAGS) -levent

@@ -10,6 +10,7 @@ class BaseResource{
   virtual void load(){
     NOTICE("load in BaseResource");
   }
+  std::string name;
 };
 extern std::vector<int> vec;
 extern std::map<std::string, BaseResource*> resources;
@@ -19,12 +20,12 @@ extern "C" int dynlib_func();
 extern "C" int dynlib_func2();
 extern "C" int dynlib1_func1();
 extern "C" int dyn_init();
-extern "C" int same_func();
+extern "C" BaseResource* same_func();
 
 // function used or defined by lib
 extern int main_func();
-extern int same_func();
 extern int dynlib_func1();
 
 typedef int (*func_t)();
+typedef BaseResource *(*funcRes_t)();
 #endif

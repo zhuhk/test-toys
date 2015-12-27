@@ -45,7 +45,7 @@ int dynlib_func2(){
   }
   return 0;
 }
-extern int same_func(){
+extern BaseResource* same_func(){
   Test * t = new Test();
   NOTICE("");
   return 0;
