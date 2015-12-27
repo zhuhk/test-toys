@@ -8,5 +8,15 @@ share/*.a
 *.o
 *_ut
 
+t
+t1
+t2
+t3
+t4
+t_c11
+t_ev
+spawn
+cpp/dynlib*.so*
+dynlib_main
 #dir
 output/

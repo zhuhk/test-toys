@@ -109,13 +109,14 @@ void t_set(){
 }
 
 void t_readlink(){
-  symlink("./t1", "./ref.t1");
+  int ret = symlink("./t1", "./ref.t1");
   char buf[256];
   int len = readlink("./ref.t1", buf, sizeof(buf));
   if(len>=0){
     buf[len] = 0;
   }
   printf("buf=%s.\n", buf);
+  return;
 }
 
 void t_it(){
@@ -141,8 +142,37 @@ void t_strftime(){
   }
   cout << "time:" << PR_Now()-begin <<endl;
 }
+void t_localtime_r(){
+  time_t begin = PR_Now();
+  for(int i=0; i<100000; i++){
+    char _strbuf[100];
+    time_t now = time(NULL);
+    struct tm result;
+    localtime_r(&now,  &result);
+  }
+  cout << "time:" << PR_Now()-begin <<endl;
+  begin = PR_Now();
+  for(int i=0; i<100000; i++){
+    char _strbuf[100];
+    time_t now = time(NULL);
+    struct tm result;
+    gmtime_r(&now,  &result);
+  }
+  cout << "time:" << PR_Now()-begin <<endl;
+  time_t now = time(NULL);
+  struct tm result;
+  localtime_r(&now,  &result);
+  printf("%d%02d%02d %02d%02d%02d\n",
+      1900+result.tm_year, result.tm_mon, result.tm_mday, result.tm_hour, result.tm_min, result.tm_sec);
+  now += 8*3600;
+  gmtime_r(&now,  &result);
+  printf("%d%02d%02d %02d%02d%02d\n",
+      1900+result.tm_year, result.tm_mon, result.tm_mday, result.tm_hour, result.tm_min, result.tm_sec);
+}
 int main(int argc, char**argv){
   t_strftime();
+  return 0;
+  t_localtime_r();
   return 0;
   t_openmp();
   return 0;

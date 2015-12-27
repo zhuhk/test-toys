@@ -10,7 +10,7 @@ LIB = -L$(SHARE_DIR) -lmisc -lpthread -lm \
   -L$(THIRD_DIR)/jsoncpp/lib -ljsoncpp\
   $(NULL)
 
-CFLAGS = -g -fPIC -I$(THIRD_DIR)/leveldb/include -I../share\
+CFLAGS = -g -O2 -fPIC -I$(THIRD_DIR)/leveldb/include -I../share\
 		 -I$(THIRD_DIR)/jsoncpp/include \
 		  $(NULL)
 CXXFLAGS = $(CFLAGS)
