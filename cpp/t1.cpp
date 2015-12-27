@@ -133,7 +133,17 @@ void t_it(){
     printf("%d\n", **it);
   }
 }
+void t_strftime(){
+  time_t begin = PR_Now();
+  for(int i=0; i<100000; i++){
+    char _strbuf[100];
+    strtime(time(NULL), _strbuf, sizeof(_strbuf));
+  }
+  cout << "time:" << PR_Now()-begin <<endl;
+}
 int main(int argc, char**argv){
+  t_strftime();
+  return 0;
   t_openmp();
   return 0;
   t_it();
