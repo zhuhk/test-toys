@@ -7,6 +7,10 @@ class Resource : public BaseResource{
   public:
   Resource(){
     name = __FILE__;
+    NOTICE("construct");
+  }
+  BaseResource* clone(){
+    return new Resource();
   }
   void load(){
     NOTICE("load in Resource");

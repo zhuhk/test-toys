@@ -3,7 +3,9 @@
 #include <unistd.h>
 #include <iostream>
 #include <vector>
+#include <memory>
 #include <dlfcn.h>
+#include <thread>         // std::thread
 
 #include "misc.h"
 
@@ -13,7 +15,7 @@ using namespace std;
 
 vector<int> vec;
 
-int main(int, char**argv){
+void func(){
   vec.push_back(1);
 
   NOTICE("++ test for same sym which link to two so");
@@ -26,13 +28,23 @@ int main(int, char**argv){
   res->name = "123111111111111111111111111111111111111111111111111111111111111111111111";
   printf("%s\n", res->name.c_str());
   res->load();
+  shared_ptr<BaseResource> resClone(res->clone());
+  resClone->name = "res clone dynlib.cpp";
+  printf("%s\n", resClone->name.c_str());
+  resClone->load();
 
   void * handleD = dlopen("./dynlib_1.so", RTLD_NOW|RTLD_GLOBAL|RTLD_DEEPBIND);
  // void * handleD = dlopen("./dynlib2.so", RTLD_NOW|RTLD_GLOBAL);
   funcSame = (funcRes_t)dlsym(handleD,"same_func");
-  res = funcSame();
-  res->name = "abc";
-  printf("%s\n", res->name.c_str());
+  BaseResource *res1 = funcSame();
+  res1->name = "ab1111111111111c";
+  res1->load();
+  printf("%s\n", res1->name.c_str());
+}
+int main(int, char**argv){
+
+  thread t(func);
+  t.join();
   return 0;
 /*
   unlink("dynlibSym.so");
