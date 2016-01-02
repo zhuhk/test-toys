@@ -10,6 +10,7 @@ class BaseResource{
   virtual void load(){
     NOTICE("load in BaseResource");
   }
+  virtual BaseResource *clone() = 0;
   std::string name;
 };
 extern std::vector<int> vec;

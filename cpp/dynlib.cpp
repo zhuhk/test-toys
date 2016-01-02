@@ -11,17 +11,52 @@ using namespace std;
 
 map<string, BaseResource*> resources;
 
+#define NS_dynlib dynlib_1_0
+namespace ns1{
+namespace NS_dynlib{
+  class Resource : public BaseResource{
+    string data;
+    vector<int> d;
+    public:
+    Resource(){
+      name = __FILE__;
+      NOTICE("contruct");
+    }
+    BaseResource* clone(){
+      return new Resource();
+    }
+    void load(){
+      NOTICE("load in Resource");
+      for(int i=0;i<1000000;i++){
+        string str = to_string(i);
+        data.append(str);
+        d.push_back(i);
+      }
+    }
+  };
+}
+}
+
+extern BaseResource* same_func(){
+  NOTICE("dynlib.cpp");
+  return new ns1::NS_dynlib::Resource();
+}
 class Resource : public BaseResource{
   string data;
   vector<int> d;
   public:
   Resource(){
     name = __FILE__;
+    NOTICE("contruct");
+  }
+  BaseResource* clone(){
+    return new Resource();
   }
   void load(){
     NOTICE("load in Resource");
-    for(int i=0;i<10000000;i++){
-      data.append(to_string(i));
+    for(int i=0;i<1000000;i++){
+      string str = to_string(i);
+      data.append(str);
       d.push_back(i);
     }
   }
