@@ -56,8 +56,12 @@ int dynlib_func2(){
   }
   return 0;
 }
+void aaa(){
+  NOTICE("");
+}
 extern BaseResource* same_func(){
   NOTICE("dynlib.cpp");
+  aaa();
   return new Resource();
 }
 class Test{

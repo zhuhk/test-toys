@@ -33,8 +33,12 @@ int dynlib1_func(){
   resources["dynlib2"] = res;
   return 0;
 }
+void aaa(){
+  NOTICE("");
+}
 extern BaseResource* same_func(){
   NOTICE("dynlib1.cpp");
+  aaa();
   return new Resource();
 }
 int dynlib1_func1(){

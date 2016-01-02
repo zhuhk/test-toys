@@ -43,6 +43,7 @@ void atomic1(uint64_t cnt){
 void atomic2(uint64_t cnt){
   for(uint64_t i=0; i<cnt; i++){
     total2.fetch_add(1);
+    //total2++;
   }
 }
 void atomic3(uint64_t cnt){
@@ -89,7 +90,7 @@ void test_atomic(){
   for(int i=0; i<10; i++){
     t[i].join();
   }
-  cout << "atomic2 - time:" << PR_Now() - begin << "ms " << "total:" << total1 <<endl;
+  cout << "atomic2 - time:" << PR_Now() - begin << "ms " << "total:" << total2 <<endl;
 
   total3 = 0;
   begin = PR_Now();
@@ -99,7 +100,7 @@ void test_atomic(){
   for(int i=0; i<10; i++){
     t[i].join();
   }
-  cout << "atomic3 - time:" << PR_Now() - begin << "ms " << "total:" << total1 <<endl;
+  cout << "atomic3 - time:" << PR_Now() - begin << "ms " << "total:" << total3 <<endl;
 }
 
 shared_future<bool> fut;
@@ -155,7 +156,77 @@ void t_vec(){
     cout << "after " << v[i] <<endl;
   }
 }
+shared_ptr<int> g_sptr1(new int);
+shared_ptr<int> g_sptrs[100];
+void sptr_thread(){
+  for(int i=0;i<10000000;i++){
+    int k = 10;
+    k = k + i;
+  }
+  shared_ptr<int> sptr2 = g_sptr1;
+  cout << "thread:" << g_sptr1.use_count() << " " << sptr2.use_count()  << endl;
+  sleep(3);
+}
+void sptr_perf_thread(int p){
+  time_t start = PR_Now();
+  int j = 0;
+  int k = 0;
+  for(int i=0;i<100000;i++){
+   shared_ptr<int> sptr = g_sptrs[p];
+   //int *ptr = &k;
+   int *ptr = sptr.get();
+   for(int j = 0; j<1; j++){
+     *ptr = j + i;
+   }
+   continue;
+   //int *ptr = sptr.get();
+  }
+  cout << "thread perf:" << PR_Now() - start << endl;
+}
+void t_shared_ptr(){
+  shared_ptr<int> sptr1(new int);
+  *sptr1 = 1;
+  shared_ptr<int> sptr2 = sptr1;
+  shared_ptr<int> sptr3 = sptr2;
+  sptr1.reset(new int);
+  *sptr1 = 2;
+  shared_ptr<int> sptr4 = sptr2;
+  shared_ptr<int> sptr5 = sptr1;
+  cout << sptr1.use_count() 
+    << " " << sptr2.use_count()
+    << " " << sptr3.use_count()
+    << " " << sptr4.use_count()
+    << " " << sptr5.use_count()
+    << endl;
+  cout << *sptr1 
+    << " " << *sptr2
+    << " " << *sptr3
+    << " " << *sptr4
+    << " " << *sptr5
+    << endl;
+  thread t[10];
+  for(int i=0; i<sizeof(t)/sizeof(thread); i++){
+    g_sptrs[i].reset(new int);
+    //t[i] = thread(sptr_thread);
+    t[i] = thread(sptr_perf_thread, i);
+  }
+  /*
+  for(int i=0; i<10; i++){
+    cout << g_sptr1.use_count()  << endl;
+    sleep(1);
+  }
+  */
+  for(int i=0; i<sizeof(t)/sizeof(thread); i++){
+  //  cout << g_sptr1.use_count()  << endl;
+    t[i].join();
+  }
+}
+
 int main () {
+  t_shared_ptr();
+  return 0;
+  test_atomic();
+  return 0;
   t_vec();
   return 0;
   t_set_del();
@@ -164,8 +235,6 @@ int main () {
   t_future();
   return 0;
 
-  test_atomic();
-  return 0;
   test_async();
   return 0;
 }
