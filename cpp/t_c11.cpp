@@ -38,17 +38,20 @@ atomic_long total3;
 void atomic1(uint64_t cnt){
   for(uint64_t i=0; i<cnt; i++){
     ++total1;
+    --total1;
   }
 }
 void atomic2(uint64_t cnt){
   for(uint64_t i=0; i<cnt; i++){
     total2.fetch_add(1);
+    total2.fetch_sub(1);
     //total2++;
   }
 }
 void atomic3(uint64_t cnt){
   for(uint64_t i=0; i<cnt; i++){
     ++total3;
+    --total3;
   }
 }
 void atomic1_lock(uint64_t cnt){
@@ -172,9 +175,9 @@ void sptr_perf_thread(int p){
   int j = 0;
   int k = 0;
   for(int i=0;i<100000;i++){
-   shared_ptr<int> sptr = g_sptrs[p];
-   //int *ptr = &k;
-   int *ptr = sptr.get();
+   //shared_ptr<int> sptr = g_sptrs[p];
+   //int *ptr = sptr.get();
+   int *ptr = &k;
    for(int j = 0; j<1; j++){
      *ptr = j + i;
    }
@@ -218,6 +221,13 @@ void t_shared_ptr(){
   */
   for(int i=0; i<sizeof(t)/sizeof(thread); i++){
   //  cout << g_sptr1.use_count()  << endl;
+    t[i].join();
+  }
+
+  for(int i=0; i<1; i++){
+    t[i] = thread(sptr_perf_thread, i);
+  }
+  for(int i=0; i<1; i++){
     t[i].join();
   }
 }
