@@ -175,9 +175,9 @@ void sptr_perf_thread(int p){
   int j = 0;
   int k = 0;
   for(int i=0;i<100000;i++){
-   //shared_ptr<int> sptr = g_sptrs[p];
-   //int *ptr = sptr.get();
-   int *ptr = &k;
+   shared_ptr<int> &sptr = g_sptrs[p];
+   int *ptr = sptr.get();
+   //int *ptr = &k;
    for(int j = 0; j<1; j++){
      *ptr = j + i;
    }
