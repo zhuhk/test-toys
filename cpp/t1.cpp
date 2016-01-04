@@ -169,7 +169,15 @@ void t_localtime_r(){
   printf("%d%02d%02d %02d%02d%02d\n",
       1900+result.tm_year, result.tm_mon, result.tm_mday, result.tm_hour, result.tm_min, result.tm_sec);
 }
+
+class cls{
+  public:
+  const static string abc;
+};
+const string cls::abc = "123";
 int main(int argc, char**argv){
+  cout << cls::abc <<endl;
+  return 0;
   t_strftime();
   return 0;
   t_localtime_r();

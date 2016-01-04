@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <pthread.h>
 #include <map>
+#include <iostream>
+#include <typeinfo>
 #include <string>
 
 #include "misc.h"
@@ -11,7 +13,7 @@ using namespace std;
 
 map<string, BaseResource*> resources;
 
-#define NS_dynlib dynlib_1_0
+#define NS_dynlib dynlib_1_1
 namespace ns1{
 namespace NS_dynlib{
   class Resource : public BaseResource{
@@ -23,6 +25,7 @@ namespace NS_dynlib{
       NOTICE("contruct");
     }
     BaseResource* clone(){
+      cout << "name:" <<  typeid(this).name() << " hash:" << typeid(this).hash_code() <<endl;
       return new Resource();
     }
     void load(){
