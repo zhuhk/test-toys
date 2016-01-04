@@ -51,8 +51,8 @@ t_ev: t_ev.o
 t: t.o
 	$(CXX) -o $@ $< $(LDFLAGS) 
 
-t_c11: t_c11.o
-	$(CXX) -o $@ $<  -std=c++11 -I$(SHARE_DIR) -L$(SHARE_DIR) -lmisc -lpthread
+t_c11: t_c11.cpp
+	$(CXX) -o $@ $<  -std=c++11 -I$(SHARE_DIR) -L$(SHARE_DIR) -lmisc -pthread
 
 t4: t4.o
 	$(CXX) -o $@ $<  -std=c++11 -lpthread
