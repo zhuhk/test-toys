@@ -4,6 +4,8 @@
 #include <unistd.h>
 #include <vector>
 #include <atomic>
+#include <cstdio>
+#include <memory>
 #include <mutex>
 #include <set>
 #include <map>
@@ -295,9 +297,21 @@ void test_map_perf(){
   NOTICE("clean hash dict. size:%lu", hashDict.size());
   //hashDict.clear();
   sleep(2);
-
+}
+//typedef std::unique_ptr<std::FILE, int (*)(std::FILE *)> unique_file_ptr_t;
+void test_autofile(){
+  for(int i=0;i<10000;i++){
+    unique_ptr<std::FILE, int (*)(std::FILE *)> uniqFile(std::fopen("test.txt", "w+"), std::fclose);
+    if(!uniqFile){
+      NOTICE("fail");
+    }else{
+      fprintf(uniqFile.get(), "%d\n", i);
+    }
+  }
 }
 int main () {
+  test_autofile();
+  return 0;
   test_map_perf();
   return 0;
   test_atomic();
