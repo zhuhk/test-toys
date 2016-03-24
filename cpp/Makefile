@@ -11,12 +11,12 @@ LIB = -L$(SHARE_DIR) -lmisc -lm \
   $(NULL)
 
 CFLAGS = -std=c++11 -g -fPIC -I$(THIRD_DIR)/leveldb/include -I../share\
-		 -I$(THIRD_DIR)/jsoncpp/include \
+		 -I$(THIRD_DIR)/jsoncpp/include -I$(THIRD_DIR)\
 		  $(NULL)
 CXXFLAGS = $(CFLAGS)
 CPPFLAGS = $(CFLAGS)
 LDFLAGS := -rdynamic $(LIB) 
-target = t t1 t2 t_c11 t4 t_ev spawn dynlib_main dynlib.so dynlib1.so.1
+target = t t1 t2 t_c11 t4 t_ev spawn dynlib_main dynlib.so dynlib1.so.1 t_rapidjson
 
 external:
 	make -C $(SHARE_DIR)
@@ -58,6 +58,9 @@ t4: t4.o
 	$(CXX) -o $@ $<  -std=c++11 -lpthread
 
 t1: t1.o
+	$(CXX) -o $@ $< -std=c++11 -fopenmp $(LDFLAGS) 
+
+t_rapidjson: t_rapidjson.o
 	$(CXX) -o $@ $< -std=c++11 -fopenmp $(LDFLAGS) 
 
 t_json: t_json.o 

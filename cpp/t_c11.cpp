@@ -11,9 +11,13 @@
 #include <map>
 #include <unordered_map>
 #include <future>
+#include <functional>
 #include "misc.h"
 
 using namespace std;
+
+#define COUT \
+  cout << __FUNCTION__ << ":" << __LINE__ << " "
 
 int async_run(int i){
   cout << "threadId " << std::this_thread::get_id() << " id" << i << endl;
@@ -144,17 +148,29 @@ void test_atomic(){
 
 shared_future<bool> fut;
 promise<bool> prom;
-void fut_get(){
-  bool ret = fut.get();
-  NOTICE("ret=%d", ret);
-  NOTICE("ret=%d", fut.get());
+void fut_wait(){
+  thread::id tid = this_thread::get_id();
+  while(fut.valid()){
+    fut.wait();
+    bool ret = fut.get();
+    COUT << tid << " ret:" << ret << endl;
+  }
 }
 void t_future(){
-  prom = promise<bool>();
-  fut = prom.get_future();
-  thread t1(fut_get), t2(fut_get), t3(fut_get);
-  sleep(1);
-  prom.set_value(false);
+  //NOTICE("fut.get");
+  //fut.get();
+
+  NOTICE("fut.wait");
+  fut.wait();
+
+  thread t1(fut_wait), t2(fut_wait), t3(fut_wait);
+  while(true){
+    prom = promise<bool>();
+    fut = prom.get_future();
+    sleep(2);
+    prom.set_value(false);
+    sleep(3);
+  }
   t1.join();
   t2.join();
   t3.join();
@@ -211,9 +227,9 @@ void sptr_perf_thread(int p){
   int j = 0;
   int k = 0;
   for(int i=0;i<100000;i++){
-   //shared_ptr<int> sptr = g_sptrs[p];
-   //int *ptr = sptr.get();
-   int *ptr = &k;
+   shared_ptr<int> &sptr = g_sptrs[p];
+   int *ptr = sptr.get();
+   //int *ptr = &k;
    for(int j = 0; j<1; j++){
      *ptr = j + i;
    }
@@ -267,6 +283,36 @@ void t_shared_ptr(){
     t[i].join();
   }
 }
+void t_hash(){
+  char arr1[] = "test";
+  char arr2[] = "test";
+  string str1 = "test";
+  string str2 = "test";
+  hash<char*> arrHash;
+  hash<string> strHash;
+  cout << arrHash(arr1) <<endl;
+  cout << arrHash(arr2) <<endl;
+  cout << strHash(str1) <<endl;
+  cout << strHash(str2) <<endl;
+}
+
+struct TestCopy{
+  atomic<int> v1;
+  TestCopy & operator=( TestCopy &input){
+    v1 = input.v1.load();
+    return *this;
+  }
+};
+void t_copy(){
+  TestCopy a1;
+  TestCopy a2;
+
+  a1.v1 = 100;
+  a2.v1 = 2;
+
+  a1 = a2;
+  cout << "a1=" << a1.v1 << endl;
+}
 
 void test_map_perf(){
   unordered_map<int64_t, double> dict;
@@ -314,18 +360,20 @@ int main () {
   return 0;
   test_map_perf();
   return 0;
-  test_atomic();
+  t_copy();
+  return 0;
+  t_hash();
   return 0;
   t_shared_ptr();
+  return 0;
+  test_atomic();
   return 0;
   t_vec();
   return 0;
   t_set_del();
   return 0;
   t_future();
-  t_future();
   return 0;
-
   test_async();
   return 0;
 }
