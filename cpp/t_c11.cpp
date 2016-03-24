@@ -270,6 +270,11 @@ void test_map_perf(){
   unordered_map<int64_t, double> dict;
   unordered_map<int64_t, float> hashDict;
   //map<int64_t, float> hashDict;
+  NOTICE("sizeof(map<int64_t,double>):%lu", sizeof(map<int64_t,double>));
+  NOTICE("sizeof(map<int64_t,float>):%lu", sizeof(map<int64_t,float>));
+  NOTICE("sizeof(unordered_map<int64_t,float>):%lu", sizeof(unordered_map<int64_t,double>));
+  NOTICE("sizeof(unordered_map<int64_t,float>):%lu", sizeof(unordered_map<int64_t,float>));
+  NOTICE("sizeof(string):%lu", sizeof(string));
 
   NOTICE("build dict");
   for(int i=0; i<5000000; i++){
