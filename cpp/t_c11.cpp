@@ -6,6 +6,8 @@
 #include <atomic>
 #include <mutex>
 #include <set>
+#include <map>
+#include <unordered_map>
 #include <future>
 #include "misc.h"
 
@@ -46,6 +48,18 @@ void atomic2(uint64_t cnt){
     total2.fetch_add(1);
     total2.fetch_sub(1);
     //total2++;
+  }
+}
+void atomic1_load(uint64_t cnt){
+  for(uint64_t i=0; i<cnt; i++){
+    if(total1>0){
+    }
+  }
+}
+void atomic2_load(uint64_t cnt){
+  for(uint64_t i=0; i<cnt; i++){
+    if(total2>0){
+    }
   }
 }
 void atomic3(uint64_t cnt){
@@ -104,6 +118,26 @@ void test_atomic(){
     t[i].join();
   }
   cout << "atomic3 - time:" << PR_Now() - begin << "ms " << "total:" << total3 <<endl;
+
+  total3 = 0;
+  begin = PR_Now();
+  for(int i=0; i<10; i++){
+    t[i] = thread(atomic1_load, 1000000);
+  }
+  for(int i=0; i<10; i++){
+    t[i].join();
+  }
+  cout << "atomic1_load - time:" << PR_Now() - begin << "ms " << "total:" << total3 <<endl;
+
+  total3 = 0;
+  begin = PR_Now();
+  for(int i=0; i<10; i++){
+    t[i] = thread(atomic2_load, 1000000);
+  }
+  for(int i=0; i<10; i++){
+    t[i].join();
+  }
+  cout << "atomic2_load - time:" << PR_Now() - begin << "ms " << "total:" << total3 <<endl;
 }
 
 shared_future<bool> fut;
@@ -232,10 +266,38 @@ void t_shared_ptr(){
   }
 }
 
+void test_map_perf(){
+  unordered_map<int64_t, double> dict;
+  unordered_map<int64_t, float> hashDict;
+  //map<int64_t, float> hashDict;
+
+  NOTICE("build dict");
+  for(int i=0; i<5000000; i++){
+    dict[i*100] = i * 111.0;
+  }
+  sleep(2);
+
+  NOTICE("clean dict. size:%lu", dict.size());
+  //dict.clear();
+  sleep(2);
+
+  NOTICE("build hash dict");
+  for(int i=0; i<5000000; i++){
+    hashDict[i*97] = i * 113.0;
+  }
+  sleep(2);
+
+  NOTICE("clean hash dict. size:%lu", hashDict.size());
+  //hashDict.clear();
+  sleep(2);
+
+}
 int main () {
-  t_shared_ptr();
+  test_map_perf();
   return 0;
   test_atomic();
+  return 0;
+  t_shared_ptr();
   return 0;
   t_vec();
   return 0;
