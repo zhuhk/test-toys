@@ -13,8 +13,11 @@
 #include <future>
 #include <functional>
 #include "misc.h"
+#include <sparsehash/sparse_hash_map>
+#include <sparsehash/dense_hash_map>
 
 using namespace std;
+using namespace google;
 
 #define COUT \
   cout << __FUNCTION__ << ":" << __LINE__ << " "
@@ -314,36 +317,6 @@ void t_copy(){
   cout << "a1=" << a1.v1 << endl;
 }
 
-void test_map_perf(){
-  unordered_map<int64_t, double> dict;
-  unordered_map<int64_t, float> hashDict;
-  //map<int64_t, float> hashDict;
-  NOTICE("sizeof(map<int64_t,double>):%lu", sizeof(map<int64_t,double>));
-  NOTICE("sizeof(map<int64_t,float>):%lu", sizeof(map<int64_t,float>));
-  NOTICE("sizeof(unordered_map<int64_t,float>):%lu", sizeof(unordered_map<int64_t,double>));
-  NOTICE("sizeof(unordered_map<int64_t,float>):%lu", sizeof(unordered_map<int64_t,float>));
-  NOTICE("sizeof(string):%lu", sizeof(string));
-
-  NOTICE("build dict");
-  for(int i=0; i<5000000; i++){
-    dict[i*100] = i * 111.0;
-  }
-  sleep(2);
-
-  NOTICE("clean dict. size:%lu", dict.size());
-  //dict.clear();
-  sleep(2);
-
-  NOTICE("build hash dict");
-  for(int i=0; i<5000000; i++){
-    hashDict[i*97] = i * 113.0;
-  }
-  sleep(2);
-
-  NOTICE("clean hash dict. size:%lu", hashDict.size());
-  //hashDict.clear();
-  sleep(2);
-}
 //typedef std::unique_ptr<std::FILE, int (*)(std::FILE *)> unique_file_ptr_t;
 void test_autofile(){
   for(int i=0;i<10000;i++){
@@ -355,10 +328,112 @@ void test_autofile(){
     }
   }
 }
+void test_map_perf(){
+  map<int64_t, double> dict;
+  unordered_map<int64_t, float> hashDict;
+  //map<int64_t, float> hashDict;
+  NOTICE("sizeof(map<int64_t,double>):%lu", sizeof(map<int64_t,double>));
+  NOTICE("sizeof(map<int64_t,float>):%lu", sizeof(map<int64_t,float>));
+  NOTICE("sizeof(unordered_map<int64_t,float>):%lu", sizeof(unordered_map<int64_t,double>));
+  NOTICE("sizeof(unordered_map<int64_t,float>):%lu", sizeof(unordered_map<int64_t,float>));
+  NOTICE("sizeof(string):%lu", sizeof(string));
+
+  NOTICE("build dict");
+  for(int i=0; i<5000000; i++){
+    dict[i*7+1] = i * 111.0;
+  }
+  sleep(2);
+
+  NOTICE("clean dict. size:%lu", dict.size());
+  //dict.clear();
+  sleep(2);
+
+  NOTICE("build hash dict");
+  for(int i=0; i<5000000; i++){
+    hashDict[i*7+1] = i * 113.0;
+  }
+  sleep(2);
+
+  NOTICE("clean hash dict. size:%lu", hashDict.size());
+  //hashDict.clear();
+  sleep(2);
+
+  sparse_hash_map<int64_t, double> smap;
+  dense_hash_map<int64_t, double> dmap;
+  dmap.set_empty_key(0);
+
+  NOTICE("build sparse hash map");
+  for(int i=0; i<5000000; i++){
+    smap[i*7+1] = i * 111.0;
+  }
+  sleep(2);
+  NOTICE("finish dict. size:%lu", smap.size());
+  sleep(2);
+
+  NOTICE("build dense hash map");
+  for(int i=0; i<5000000; i++){
+    dmap[i*7+1] = i * 111.0;
+  }
+  sleep(2);
+  NOTICE("finish dense dict. size:%lu", dmap.size());
+  sleep(2);
+
+  time_t begin;
+  for(int j=0; j<10; j++){
+    begin = PR_Now();
+    for(int i=0;i<10000;i++){
+      dict.find(i*7+1);
+    }
+    NOTICE("map:%lu", PR_Now() - begin);
+
+    begin = PR_Now();
+    for(int i=0;i<10000;i++){
+      hashDict.find(i*7+1);
+    }
+    NOTICE("unordered_map:%lu", PR_Now() - begin);
+
+    begin = PR_Now();
+    for(int i=0;i<10000;i++){
+      smap.find(i*7+1);
+    }
+    NOTICE("sparse hash map:%lu", PR_Now() - begin);
+
+    begin = PR_Now();
+    for(int i=0;i<10000;i++){
+      dmap.find(i*7+1);
+    }
+    NOTICE("dense hash map:%lu", PR_Now() - begin);
+
+    begin = PR_Now();
+    for(int i=0;i<10000;i++){
+      dict.find(i*7+2);
+    }
+    NOTICE("miss map:%lu", PR_Now() - begin);
+
+    begin = PR_Now();
+    for(int i=0;i<10000;i++){
+      hashDict.find(i*7+2);
+    }
+    NOTICE("miss unordered_map:%lu", PR_Now() - begin);
+
+    begin = PR_Now();
+    for(int i=0;i<10000;i++){
+      smap.find(i*7+2);
+    }
+    NOTICE("miss sparse hash map:%lu", PR_Now() - begin);
+
+    begin = PR_Now();
+    for(int i=0;i<10000;i++){
+      dmap.find(i*7+2);
+    }
+    NOTICE("miss dense hash map:%lu", PR_Now() - begin);
+    NOTICE("");
+  }
+}
 int main () {
-  test_autofile();
-  return 0;
   test_map_perf();
+  return 0;
+  test_autofile();
   return 0;
   t_copy();
   return 0;
