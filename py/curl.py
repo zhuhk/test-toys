@@ -1,25 +1,18 @@
 #!/bin/env python
+
 import pycurl
+from StringIO import StringIO
 
-# -*- coding: utf-8 -*-  
-import pycurl  
-import os  
-import StringIO
+buffer = StringIO()
 
-def upload():  
-  pc = pycurl.Curl()  
-  pc.setopt(pycurl.POST, 1)  
-  pc.setopt(pycurl.URL, 'http://127.0.0.1/')  
-  data = "test"
-  pc.setopt(pycurl.POSTFIELDS, data)  
-  pc.setopt(pycurl.VERBOSE, 1);
+c = pycurl.Curl()
+c.setopt(c.VERBOSE, True)
+c.setopt(c.WRITEFUNCTION, buffer.write)
+c.setopt(c.URL, 'https://at.umeng.com/u0v85n')
+c.setopt(c.FOLLOWLOCATION, True)
+c.setopt(c.NOBODY, True)
+c.perform()
+print('Status: %d' % c.getinfo(c.RESPONSE_CODE))
+print('Status: %s' % c.getinfo(c.EFFECTIVE_URL))
+c.close()
 
-  b = StringIO.StringIO()
-  pc.setopt(pycurl.WRITEFUNCTION, b.write)
-  for _ in range(10000):
-    pc.perform()  
-  #response_code = pc.getinfo(pycurl.RESPONSE_CODE)  
-  pc.close()  
-
-if __name__ == "__main__":  
-  upload()
