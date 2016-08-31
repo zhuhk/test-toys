@@ -12,6 +12,7 @@
 #include <unordered_map>
 #include <future>
 #include <functional>
+#include <queue>
 #include "misc.h"
 #include <sparsehash/sparse_hash_map>
 #include <sparsehash/dense_hash_map>
@@ -430,7 +431,89 @@ void test_map_perf(){
     NOTICE("");
   }
 }
+void test_priority_queue(){
+  priority_queue<int, vector<int>, greater<int> > q;
+  q.push(10);
+  q.push(11);
+  q.push(12);
+  q.push(13);
+
+  cout << q.top() << endl;
+  q.pop();
+  cout << q.top() << endl;
+  q.pop();
+  cout << q.top() << endl;
+  q.pop();
+  cout << q.top() << endl;
+  q.pop();
+
+}
+void test_heap(){
+  vector<int> v;
+
+  v.push_back(1);
+  push_heap(v.begin(),v.end());
+  v.push_back(7);
+  push_heap(v.begin(),v.end());
+  v.push_back(3);
+  push_heap(v.begin(),v.end());
+  v.push_back(9);
+  push_heap(v.begin(),v.end());
+  for (unsigned i=0; i<v.size(); i++)
+    std::cout << ' ' << v[i];
+  cout << endl;
+}
+struct SetItem{
+  time_t created;
+  string data;
+  bool operator < (const SetItem &rhs) const{
+    return created<rhs.created || (created==rhs.created && data<rhs.data);
+  }
+};
+void test_set(){
+  set<SetItem> s;
+  
+  SetItem item;
+
+  for(int i = 0; i<10; i++){
+    item.created = PR_Now() % 10000;
+    item.data = "data" + to_string(i);
+    s.insert(item);
+  }
+  item.data = "data" + to_string(13);
+  cout << "item:" << item.created << " " << item.data << endl;
+  s.insert(item);
+  cout << "item:" << item.created << " " << item.data << endl;
+
+  for(auto &i: s){
+    cout << "set: " << i.created << " " << i.data << endl;
+  }
+  auto j = s.begin();
+  cout << "first:" << j->created << " " << j->data << endl;
+
+  cout << "item:" << item.created << " " << item.data << endl;
+  auto k = s.find(item);
+  if(k != s.end()){
+    cout << "found " << k->created << " " << k->data << endl;
+  }else{
+    cout << "not found " << item.created << item.data << endl;
+  }
+  cout << "item:" << item.created << " " << item.data << endl;
+  s.erase(item);
+  k = s.find(item);
+  if(k != s.end()){
+    cout << "found " << k->created << " " << k->data << endl;
+  }else{
+    cout << "not found " << item.created << item.data << endl;
+  }
+}
 int main () {
+  test_set();
+  return 0;
+  test_heap();
+  return 0;
+  test_priority_queue();
+  return 0;
   test_map_perf();
   return 0;
   test_autofile();
