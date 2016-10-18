@@ -507,7 +507,46 @@ void test_set(){
     cout << "not found " << item.created << item.data << endl;
   }
 }
+void test_map(){
+  map<string, string> m;
+  m["k1"] = "v1";
+  m["k2"] = "v2";
+  m["k3"] = "v3";
+  for(auto item: m){
+    cout << "key:" << item.first << " value:" << item.second << endl;
+  }
+}
+class C{
+  public:
+    ~C(){
+      cout << "release C" << endl;
+    }
+
+};
+void test_shared_ptr(){
+  C c;
+  {
+    shared_ptr<C> ptr(&c);
+  }
+  cout << "after" << endl;
+}
+void test_gdb_map(){
+  map<int, int> m;
+  m[0] = 1;
+  m[1] = 1;
+  m[2] = 1;
+
+  string str("1234");
+  string str1("1234");
+  return;
+}
 int main () {
+  test_gdb_map();
+  return 0;
+  test_shared_ptr();
+  return 0;
+  test_map();
+  return 0;
   test_set();
   return 0;
   test_heap();

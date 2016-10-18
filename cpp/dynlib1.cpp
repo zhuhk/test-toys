@@ -40,6 +40,23 @@ int dynlib1_func(){
 void aaa(){
   NOTICE("");
 }
+
+struct StaticVar{
+  StaticVar(){
+    NOTICE("construct StaticVar");
+  }
+  ~StaticVar(){
+    NOTICE("destruct StaticVar");
+  }
+};
+class StaticMember{
+  public:
+    static StaticVar staticVar;
+    StaticMember(){}
+    ~StaticMember(){}
+};
+
+StaticVar StaticMember::staticVar;
 extern BaseResource* same_func(){
   NOTICE("dynlib1.cpp");
   aaa();

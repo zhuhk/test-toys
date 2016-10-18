@@ -40,6 +40,23 @@ namespace NS_dynlib{
 }
 }
 
+struct StaticVar{
+  StaticVar(){
+    NOTICE("construct StaticVar");
+  }
+  ~StaticVar(){
+    NOTICE("destruct StaticVar");
+  }
+};
+class StaticMember{
+  public:
+    static StaticVar staticVar;
+    StaticMember(){}
+    ~StaticMember(){}
+};
+
+StaticVar StaticMember::staticVar;
+
 extern BaseResource* same_func(){
   NOTICE("dynlib.cpp");
   return new ns1::NS_dynlib::Resource();

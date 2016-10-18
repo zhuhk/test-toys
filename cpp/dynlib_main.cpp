@@ -20,9 +20,12 @@ void func(){
 
   NOTICE("++ test for same sym which link to two so");
   funcRes_t funcSame = NULL;
+  NOTICE("before dlopen");
   void * handleC = dlopen("./dynlib.so", RTLD_NOW|RTLD_GLOBAL);
+  NOTICE("before dlsym");
  // void * handleC = dlopen("./dynlib.so", RTLD_NOW|RTLD_GLOBAL);
   funcSame = (funcRes_t)dlsym(handleC,"same_func");
+  NOTICE("before funcSame");
   BaseResource *res = funcSame();
   printf("%s\n", res->name.c_str());
   res->name = "123111111111111111111111111111111111111111111111111111111111111111111111";
@@ -32,7 +35,9 @@ void func(){
   resClone->name = "res clone dynlib.cpp";
   printf("%s\n", resClone->name.c_str());
   resClone->load();
+  NOTICE("before dlopen(dynlib_1.so)");
   void * handleD = dlopen("./dynlib_1.so", RTLD_NOW|RTLD_GLOBAL);
+  NOTICE("before dlsym(dynlib_1.so, same_func)");
   funcSame = (funcRes_t)dlsym(handleD,"same_func");
   BaseResource *res1 = funcSame();
   res1->name = "ab1111111111111c";
