@@ -10,7 +10,7 @@ LIB = -L$(SHARE_DIR) -lmisc -lm \
   -L$(THIRD_DIR)/jsoncpp/lib -ljsoncpp\
   $(NULL)
 
-CFLAGS = -std=c++11 -g -fPIC -I$(THIRD_DIR)/leveldb/include -I../share\
+CFLAGS = -std=c++11 -g -O3 -fPIC -I$(THIRD_DIR)/leveldb/include -I../share\
 		 -I$(THIRD_DIR)/jsoncpp/include -I$(THIRD_DIR)\
 		 -I$(THIRD_DIR)/sparsehash/include -I$(THIRD_DIR)\
 		  $(NULL)

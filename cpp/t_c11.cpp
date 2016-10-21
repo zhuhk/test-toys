@@ -540,7 +540,94 @@ void test_gdb_map(){
   string str1("1234");
   return;
 }
+
+void test_map_perf1(){
+  unordered_map<int,string> m;
+  unordered_map<int,string> m1;
+  unordered_map<int,string> m2;
+
+
+  time_t begin;
+
+  begin = PR_Now();
+  for(int i=0; i<1000; i++){
+    m[i] = "123";
+    m[1000-i] = "123";
+  }
+  cout << "m[i]=123:" << PR_Now() - begin << endl;
+
+  begin = PR_Now();
+  for(int i=0; i<1000; i++){
+    m1.insert(make_pair(i, "123"));
+    m1.insert(make_pair(1000-i, "123"));
+  }
+  cout << "insert(make_pair):" << PR_Now() - begin << endl;
+
+  begin = PR_Now();
+  for(int i=0; i<1000; i++){
+    m1.insert(std::move(make_pair(i, "123")));
+    m2.insert(std::move(make_pair(1000-i, "123")));
+  }
+  cout << "insert(move(make_pair)):" << PR_Now() - begin << endl;
+
+  string str1("str1"), str2("str2");
+
+  str2 = std::move(str1);
+
+  cout << "str1:"<< str1 << " str2:" << str2 << endl;
+
+  char arr[1000][10];
+  vector<const char*> vec;
+  unordered_map<int, const char*> m3;
+  for(int i=0;i<10;i++){
+    vec.push_back(NULL);
+    m3[i] = NULL;
+  }
+  const char *pch;
+
+  begin = PR_Now();
+  for(int i=100000; i>0; i--){
+    pch = m3[i%10];
+  }
+  cout << "unordered_map:" << PR_Now() - begin << endl;
+
+  begin = PR_Now();
+  for(int i=100000; i>0; i--){
+    pch = vec[i%10];
+  }
+  cout << "vec:" << PR_Now() - begin << endl;
+
+  begin = PR_Now();
+  for(int i=100000; i>0; i--){
+    pch = arr[i%10];
+  }
+  cout << "arr:" << PR_Now() - begin << endl;
+
+  vector<int> v1, v2;
+  for(int i=0;i<10;i++){
+    v1.push_back(i);
+    v2.push_back(10-i);
+  }
+  v1 = std::move(v2);
+  cout << v1.size() << " " << v2.size() << endl;
+
+  map<string, vector<string>> features, newFeatures;
+  features["1"].push_back("1");
+  features["1"].push_back("1");
+  features["1"].push_back("1");
+  features["2"].push_back("2");
+  features["2"].push_back("2");
+  features["2"].push_back("2");
+
+  for (const auto& feature: features) {
+    vector<string> vec(std::move(feature.second));
+    cout << "feature: "<< feature.first << ":" << feature.second.size() << endl;
+  }
+
+}
 int main () {
+  test_map_perf1();
+  return 0;
   test_gdb_map();
   return 0;
   test_shared_ptr();
