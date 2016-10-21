@@ -586,21 +586,24 @@ void test_map_perf1(){
   const char *pch;
 
   begin = PR_Now();
-  for(int i=100000; i>0; i--){
-    pch = m3[i%10];
+  for(int i=1000000; i>0; i--){
+    pch = m3[i%10]+1;
   }
+  pch += 1;
   cout << "unordered_map:" << PR_Now() - begin << endl;
 
   begin = PR_Now();
-  for(int i=100000; i>0; i--){
-    pch = vec[i%10];
+  for(int i=10000000; i>0; i--){
+    pch = vec[i%10]+1;
   }
+  pch += 1;
   cout << "vec:" << PR_Now() - begin << endl;
 
   begin = PR_Now();
-  for(int i=100000; i>0; i--){
-    pch = arr[i%10];
+  for(int i=10000000; i>0; i--){
+    pch = arr[i%10]+1;
   }
+  pch += 1;
   cout << "arr:" << PR_Now() - begin << endl;
 
   vector<int> v1, v2;
