@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <execinfo.h>
 #include <time.h>
 #include <sys/time.h>
 #include <string.h>
@@ -17,6 +18,20 @@
   cout << endl
 
 using namespace std;
+
+static void print_reason(){
+  void *array[10];
+  size_t size;
+  size = backtrace(array, 10);
+  char **strings;
+  int i;
+  strings = backtrace_symbols(array, size);
+  printf("Obtained %d stack frames.\n", size);
+  for (i = 0; i < size; i++)
+    printf("%s\n", strings[i]);
+  free(strings);
+}
+
 int main(int argc, char**argv){
     TEST(int);
     TEST(mul);

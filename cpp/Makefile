@@ -10,7 +10,7 @@ LIB = -L$(SHARE_DIR) -lmisc -lm \
   -L$(THIRD_DIR)/jsoncpp/lib -ljsoncpp\
   $(NULL)
 
-CFLAGS = -std=c++11 -g -O3 -fPIC -I$(THIRD_DIR)/leveldb/include -I../share\
+CFLAGS = -std=c++11 -g -fPIC -I$(THIRD_DIR)/leveldb/include -I../share\
 		 -I$(THIRD_DIR)/jsoncpp/include -I$(THIRD_DIR)\
 		 -I$(THIRD_DIR)/sparsehash/include -I$(THIRD_DIR)\
 		  $(NULL)
@@ -45,12 +45,13 @@ dynlib1.so.2 : dynlib1_2.o
 	$(CXX) -o $@ $< -Wl,-soname,$@ -fpic -shared
 
 dynlib_main : dynlib_main.o
-	$(CXX) -o $@ $< $(LDFLAGS) -ldl -ltcmalloc
+	$(CXX) -o $@ $< $(LDFLAGS) -ldl #-ltcmalloc
 
 t_ev: t_ev.o
 	$(CXX) -o $@ $< $(LDFLAGS) -levent
+
 t: t.o
-	$(CXX) -o $@ $< $(LDFLAGS) 
+	$(CXX) -o $@ $(CPPFLAGS) $< $(LDFLAGS)
 
 t_c11: t_c11.o
 	$(CXX) -o $@ $<  -std=c++11 -I$(SHARE_DIR) -L$(SHARE_DIR) -lmisc -pthread
