@@ -19,20 +19,8 @@
 
 using namespace std;
 
-static void print_reason(){
-  void *array[10];
-  size_t size;
-  size = backtrace(array, 10);
-  char **strings;
-  int i;
-  strings = backtrace_symbols(array, size);
-  printf("Obtained %d stack frames.\n", size);
-  for (i = 0; i < size; i++)
-    printf("%s\n", strings[i]);
-  free(strings);
-}
-
 int main(int argc, char**argv){
+    TEST(map);
     TEST(int);
     TEST(mul);
     TEST(string);
@@ -40,7 +28,9 @@ int main(int argc, char**argv){
     //TEST(time);
     return 0;
 }
-
+void ut_map(){
+  pair<string, vector<string> > p("k1", {"v1"});
+}
 void ut_int(){
   int32_t v = -5;
   int32_t v1 = v % 3;

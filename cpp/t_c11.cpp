@@ -628,39 +628,81 @@ void test_map_perf1(){
   }
 
 }
+
+string f1(){
+  static string str("123");
+  string &str1 = str;
+  return str;
+}
+void test_vec_perf1(){
+  vector< pair<string,vector<string> > > m;
+  vector< pair<string,vector<string> > > m1;
+  vector< pair<string,vector<string> > > m2;
+  vector< pair<string,vector<string> > > m3;
+  vector< pair<string,vector<string> > > m4;
+
+  string s1 = std::move(f1());
+  string s2 = std::move(f1());
+  string s3 = std::move(f1());
+  cout << "s1:" << s1 << endl;
+  cout << "s2:" << s2 << endl;
+  cout << "s3:" << s3 << endl;
+
+  time_t begin;
+
+  begin = PR_Now();
+  string str("123");
+  for(int i=0; i<10000; i++){
+    pair<string, vector<string> > p(str, {"321"});
+    m.push_back(p);
+  }
+  cout << "m.push_back:" << PR_Now() - begin << endl;
+
+  begin = PR_Now();
+  str = "3214";
+  for(int i=0; i<10000; i++){
+    pair<string, vector<string> > p;
+    p.first = str;
+    p.second.push_back("123");
+    m1.push_back(p);
+  }
+  cout << "m1.push_back(str):" << PR_Now() - begin << endl;
+
+  begin = PR_Now();
+  str = "321";
+  for(int i=0; i<10000; i++){
+    pair<string, vector<string> > p;
+    p.first = str;
+    p.second.push_back("123");
+    m2.push_back(std::move(p));
+    if(i==9999){
+      cout << "p:" << p.first << "=" << p.second.size() << endl;
+    }
+  }
+  cout << "m2.push_back(move str):" << PR_Now() - begin << endl;
+
+  begin = PR_Now();
+  str = "321";
+  for(int i=0; i<10000; i++){
+    pair<string, vector<string> > p;
+    p.first = "111";
+    p.second.push_back("123");
+    m4.push_back(std::move(p));
+  }
+  cout << "m2.push_back(move char):" << PR_Now() - begin << endl;
+
+  begin = PR_Now();
+  str = "3213";
+  for(int i=0; i<10000; i++){
+    pair<string, vector<string> > p;
+    p.first = str;
+    m3.push_back(std::move(p));
+    m3.back().second.push_back("123");
+  }
+  cout << "m3.push_back(move back):" << PR_Now() - begin << endl;
+}
+
 int main () {
-  test_map_perf1();
-  return 0;
-  test_gdb_map();
-  return 0;
-  test_shared_ptr();
-  return 0;
-  test_map();
-  return 0;
-  test_set();
-  return 0;
-  test_heap();
-  return 0;
-  test_priority_queue();
-  return 0;
-  test_map_perf();
-  return 0;
-  test_autofile();
-  return 0;
-  t_copy();
-  return 0;
-  t_hash();
-  return 0;
-  t_shared_ptr();
-  return 0;
-  test_atomic();
-  return 0;
-  t_vec();
-  return 0;
-  t_set_del();
-  return 0;
-  t_future();
-  return 0;
-  test_async();
+  test_vec_perf1();
   return 0;
 }
