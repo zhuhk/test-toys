@@ -644,9 +644,11 @@ void test_vec_perf1(){
   string s1 = std::move(f1());
   string s2 = std::move(f1());
   string s3 = std::move(f1());
+  string s4 = std::move(s3.substr(1,2));
   cout << "s1:" << s1 << endl;
   cout << "s2:" << s2 << endl;
   cout << "s3:" << s3 << endl;
+  cout << "s4:" << s4 << endl;
 
   time_t begin;
 
