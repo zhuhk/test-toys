@@ -330,6 +330,9 @@ void test_autofile(){
   }
 }
 void test_map_perf(){
+  unordered_map<string,string> aaa;
+  aaa[""] = "123";
+  return;
   map<int64_t, double> dict;
   unordered_map<int64_t, float> hashDict;
   //map<int64_t, float> hashDict;
@@ -542,6 +545,25 @@ void test_gdb_map(){
 }
 
 void test_map_perf1(){
+  unordered_map<string, vector<string>> aaa({
+      {"ag", {"602", "603"}},
+      {"cmi", {"20736"}},
+      {"crowd", {"902", "913"}},
+      {"", {"501"}},
+      {"rtst", {"peC5GS", "g6jY35", "Ltkoz3", "qd2CMs", "MTxQba", "4nW41X", "G7tmEX", "12BMi1", "cQoB8E", "OWz98F"}},
+      {"rtuhy",{"1x118x123x126"}},
+      {"rtuhy1",{"1"}},
+      {"rtuhy2", {"1x118"}},
+      {"rtuhy3", {"1x118x123"}},
+      {"sti", {"80301", "80103"}},
+      {"uch1",{"sina_home", "hdphoto", "cmnt", "sports", "kandian", "so", "sc", "news", "plan", "survey"}},
+      {"uch2", {"blog_dpool", "sports_nba", "sc_news", "news_sh", "sc_null", "proc_cmnt", "finance_china", "survey_null", 
+      "news_news_zt", "sports_sports_zt"}},
+      {"uit", {"20736"}}
+      });
+  cout << "aaa:" << aaa[""][0] << endl;
+  cout << "aaa:" << aaa["ag"][0] << endl;
+
   unordered_map<int,string> m;
   unordered_map<int,string> m1;
   unordered_map<int,string> m2;
@@ -705,6 +727,8 @@ void test_vec_perf1(){
 }
 
 int main () {
+  test_map_perf1();
+  return 0;
   test_vec_perf1();
   return 0;
 }
