@@ -228,7 +228,7 @@ const char *regNames[] = {"%rax", "%rcx", "%rdx", "%rbx", "%rsp", "%rbp", "%rsi"
 
 void print_hex(int len, const unsigned char*bytes){
   for(int i=0; i<len; i++){
-    printf("%0x ", bytes[i]);
+    printf("%02x ", bytes[i]);
   }
 }
 void disassemble(const unsigned char *raw_instr){
@@ -251,7 +251,7 @@ void disassemble(const unsigned char *raw_instr){
       len = 4;
       print_hex(len, raw_instr);
       unsigned char scaled = 1 << (raw_instr[2] >> 6);
-      printf("pushq %x(%s, %s, %d)\n", raw_instr[3], regNames[(raw_instr[2]&0x3)], regNames[(raw_instr[2]>>3)&0x3], scaled);
+      printf("pushq %#x(%s, %s, %d)\n", raw_instr[3], regNames[(raw_instr[2]&0x3)], regNames[(raw_instr[2]>>3)&0x3], scaled);
     } else {
       switch(subcode & 0xf8){
         case 0x30: // indirect
