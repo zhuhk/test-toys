@@ -205,7 +205,92 @@ void t_log10f(){
   }
   cout << "logf*100w:" << Now() - begin << "ms" <<endl;
 }
+
+void t_bit(){
+  int32_t a = 3;
+
+  char *p = (char*) &a;
+
+  for(int i=0; i<4; i++){
+    printf("%x ", p[i]);
+  }
+  printf("\n");
+}
+
+/*
+pushq $0x3f10   immediate constant  01101000 00010000 00111111 00000000 00000000 (5)    68 10 3f 00 00
+pushq %rbx  register    01010011 (1)    53
+pushq (%rdx)    indirect    11111111 00110010 (2)   ff 32
+pushq 0x8(%rax) indirect with displacement  11111111 01110000 00001000(3)   ff 70 08
+pushq 0xff(%rbp,%rcx,4) indirect with displacement and scaled-index 11111111 01110100 10001101 11111111 (4) ff 74 8d ff
+*/
+const char *regNames[] = {"%rax", "%rcx", "%rdx", "%rbx", "%rsp", "%rbp", "%rsi", "%rdi"};
+
+void print_hex(int len, const unsigned char*bytes){
+  for(int i=0; i<len; i++){
+    printf("%0x ", bytes[i]);
+  }
+}
+void disassemble(const unsigned char *raw_instr){
+  unsigned char opcode = raw_instr[0];
+  unsigned char len = 1;
+
+  if((opcode & 0xf8) == 0x50){ // register
+    len = 1;
+    unsigned char reg = opcode & 0x7;
+    print_hex(len, raw_instr);
+    printf("pushq %s\n", regNames[reg]);
+  }else if(opcode == 0x68){ // immediate constant
+    len = 5;
+    print_hex(len, raw_instr);
+    uint32_t *addr = (uint32_t*)(raw_instr+1);
+    printf("pushq $%#x\n", *addr);
+  }else if(opcode == 0xff){
+    unsigned char subcode = raw_instr[1];
+    if(subcode == 0x74){ // indirect with displacement and scaled-index
+      len = 4;
+      print_hex(len, raw_instr);
+      unsigned char scaled = 1 << (raw_instr[2] >> 6);
+      printf("pushq %x(%s, %s, %d)\n", raw_instr[3], regNames[(raw_instr[2]&0x3)], regNames[(raw_instr[2]>>3)&0x3], scaled);
+    } else {
+      switch(subcode & 0xf8){
+        case 0x30: // indirect
+          len = 2;
+          print_hex(len, raw_instr);
+          printf("pushq (%s)\n", regNames[(subcode&0x3)]);
+          break;
+        case 0x70: //indirect with displacement
+          len = 3;
+          print_hex(len, raw_instr);
+          printf("pushq %#x(%s)\n", raw_instr[2], regNames[(subcode&0x3)]);
+          break;
+        default:
+          printf("invalide code. subcode:%x\n", subcode);
+      }
+    }
+  }else{
+    printf("invalid opcode code:%x\n", opcode);
+  }
+}
+
+void t_disassemble(){
+  unsigned char data1[] = {0x68, 0x10, 0x3f, 0x00, 0x00};
+  unsigned char data2[] = {0x53};
+  unsigned char data3[] = {0xff, 0x32};
+  unsigned char data4[] = {0xff, 0x70, 0x08};
+  unsigned char data5[] = {0xff, 0x74, 0x8d, 0xff};
+
+  disassemble(data1);
+  disassemble(data2);
+  disassemble(data3);
+  disassemble(data4);
+  disassemble(data5);
+}
 int main(){
+  t_disassemble();
+  return 0;
+  t_bit();
+  return 0;
   t_vec();
   return 0;
   t_log10f();

@@ -545,6 +545,17 @@ void test_gdb_map(){
 }
 
 void test_map_perf1(){
+  unordered_map<string, string> a1;
+  a1["s1"] = "v1";
+  a1["s2"] = "v2";
+  vector<pair<string,string>> va1;
+  for(auto &item:a1){
+    va1.push_back(std::move(item));
+  }
+
+  for(auto &item:a1){
+    cout << "a1:" << item.first << item.second << endl;
+  }
   unordered_map<string, vector<string>> aaa({
       {"ag", {"602", "603"}},
       {"cmi", {"20736"}},
