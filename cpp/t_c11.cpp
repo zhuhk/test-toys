@@ -737,7 +737,24 @@ void test_vec_perf1(){
   cout << "m3.push_back(move back):" << PR_Now() - begin << endl;
 }
 
+void test_substr(){
+  string url = "http://abc";
+
+  auto startPos = url.find("://");
+  if(startPos != string::npos){
+    startPos += 3;
+  } else{
+    startPos = 0;
+  } 
+  auto slashPos = url.find("/", startPos);
+  string ret = url.substr(startPos, slashPos - startPos);
+
+  cout << ret << endl;
+}
+
 int main () {
+  test_substr();
+  return 0;
   test_map_perf1();
   return 0;
   test_vec_perf1();

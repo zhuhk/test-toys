@@ -9,6 +9,7 @@
 #include <string>
 #include <iostream>
 #include <algorithm>
+#include <typeinfo>
 #include "misc.h"
 
 #define TEST(func) \
@@ -20,6 +21,8 @@
 using namespace std;
 
 int main(int argc, char**argv){
+    TEST(ref);
+    return 0;
     TEST(map);
     TEST(int);
     TEST(mul);
@@ -27,6 +30,51 @@ int main(int argc, char**argv){
     //TEST(strtoul);
     //TEST(time);
     return 0;
+}
+
+class Obj{
+  public:
+    Obj(const Obj &obj){
+      cout << "copy construct:" << this << " time:" << time(NULL) <<  endl;
+      vec = obj.vec;
+    }
+    Obj(){
+      for(int i=0;i<100000;i++){
+        vec.push_back(i);
+      }
+      //sleep(1);
+      cout << "construct:" << this << " time:" << time(NULL) <<  endl;
+    }
+    ~Obj(){
+      //sleep(1);
+      cout << "destruct:" << this << " time:" << time(NULL) <<  endl;
+    }
+    vector<int> vec;
+};
+
+Obj test_obj(){
+  Obj obj1;
+  cout << "tmpobj1:" << &obj1 << " time:" << time(NULL) <<  endl;
+
+  Obj obj2;
+  cout << "tmpobj2:" << &obj2 << " time:" << time(NULL) <<  endl;
+  Obj obj;
+  cout << "tmpobj:" << &obj << " time:" << time(NULL) <<  endl;
+  Obj objN[20];
+  cout << "tmpobjN:" << &obj+19 << " time:" << time(NULL) <<  endl;
+  return obj;
+}
+
+void ut_ref(){
+  Obj objA;
+  cout << "tmpobjA:" << &objA << " time:" << time(NULL) <<  endl;
+  Obj obj = test_obj();
+  cout << "tmpobjUTobj:" << &obj << " time:" << time(NULL) <<  endl;
+  Obj objB;
+  cout << "tmpobjB:" << &objB << " time:" << time(NULL) <<  endl;
+  obj.vec.push_back(0);
+  //sleep(3);
+  cout << "obj:" << &obj << " time:" << time(NULL) <<  endl;
 }
 void ut_map(){
   pair<string, vector<string> > p("k1", {"v1"});
