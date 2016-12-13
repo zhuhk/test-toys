@@ -56,25 +56,28 @@ Obj test_obj(){
   Obj obj1;
   cout << "tmpobj1:" << &obj1 << " time:" << time(NULL) <<  endl;
 
+  Obj obj(obj1);
+  cout << "tmpobj:" << &obj << " time:" << time(NULL) <<  endl;
+
   Obj obj2;
   cout << "tmpobj2:" << &obj2 << " time:" << time(NULL) <<  endl;
-  Obj obj;
-  cout << "tmpobj:" << &obj << " time:" << time(NULL) <<  endl;
-  Obj objN[20];
-  cout << "tmpobjN:" << &obj+19 << " time:" << time(NULL) <<  endl;
   return obj;
 }
 
 void ut_ref(){
   Obj objA;
   cout << "tmpobjA:" << &objA << " time:" << time(NULL) <<  endl;
-  Obj obj = test_obj();
-  cout << "tmpobjUTobj:" << &obj << " time:" << time(NULL) <<  endl;
+  test_obj();
   Obj objB;
   cout << "tmpobjB:" << &objB << " time:" << time(NULL) <<  endl;
-  obj.vec.push_back(0);
-  //sleep(3);
-  cout << "obj:" << &obj << " time:" << time(NULL) <<  endl;
+  Obj objI = test_obj();
+  Obj objC;
+  cout << "tmpobjC:" << &objC << " time:" << time(NULL) <<  endl;
+  cout << "tmpobjI:" << &objI << " time:" << time(NULL) <<  endl;
+  const Obj & objII = test_obj();
+  Obj objD;
+  cout << "tmpobjD:" << &objD << " time:" << time(NULL) <<  endl;
+  cout << "tmpobjII:" << &objII << " time:" << time(NULL) <<  endl;
 }
 void ut_map(){
   pair<string, vector<string> > p("k1", {"v1"});
