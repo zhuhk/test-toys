@@ -25,3 +25,4 @@ thirdsrc/
 
 test.txt
 target/
+*.pyc

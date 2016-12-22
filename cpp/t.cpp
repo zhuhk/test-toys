@@ -7,6 +7,7 @@
 #include <sys/time.h>
 #include <string.h>
 #include <string>
+#include <unordered_set>
 #include <iostream>
 #include <algorithm>
 #include <typeinfo>
@@ -21,6 +22,8 @@
 using namespace std;
 
 int main(int argc, char**argv){
+    TEST(assign);
+    return 0;
     TEST(ref);
     return 0;
     TEST(map);
@@ -32,6 +35,23 @@ int main(int argc, char**argv){
     return 0;
 }
 
+void ut_assign(){
+  for(int i=0;i<100000;i++){
+    string str;
+
+    string str1 = str.substr(0,-1);
+    cout << "end" << str1 << endl;
+    return;
+  }
+  char data[10];
+
+  unordered_set<string> s;
+  for(int i=0; i<100000; i++){
+    string str(data,0);
+    s.insert(str);
+  }
+  cout << s.size() << endl;
+}
 class Obj{
   public:
     Obj(const Obj &obj){
