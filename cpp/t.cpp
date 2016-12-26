@@ -22,9 +22,9 @@
 using namespace std;
 
 int main(int argc, char**argv){
-    TEST(assign);
-    return 0;
     TEST(ref);
+    return 0;
+    TEST(assign);
     return 0;
     TEST(map);
     TEST(int);
@@ -59,7 +59,7 @@ class Obj{
       vec = obj.vec;
     }
     Obj(){
-      for(int i=0;i<100000;i++){
+      for(int i=0;i<1;i++){
         vec.push_back(i);
       }
       //sleep(1);
@@ -73,6 +73,9 @@ class Obj{
 };
 
 Obj test_obj(){
+  static int i = 0;
+
+  i++;
   Obj obj1;
   cout << "tmpobj1:" << &obj1 << " time:" << time(NULL) <<  endl;
 
@@ -81,7 +84,8 @@ Obj test_obj(){
 
   Obj obj2;
   cout << "tmpobj2:" << &obj2 << " time:" << time(NULL) <<  endl;
-  return obj;
+  cout << "return: " << ((i%2==0)?"obj1":"obj2") << endl;
+  return i%2==0 ? obj1 : obj2;
 }
 
 void ut_ref(){

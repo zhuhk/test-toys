@@ -752,7 +752,18 @@ void test_substr(){
   cout << ret << endl;
 }
 
+void test_refstr(){
+  string str1="123", str2="456";
+
+  const string & s = str1 + str2;
+
+  cout << s << endl;
+
+  printf("%p %p %p\n", &str1, &str2, &s);
+}
 int main () {
+  test_refstr();
+  return 0;
   test_substr();
   return 0;
   test_map_perf1();
