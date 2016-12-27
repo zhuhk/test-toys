@@ -22,6 +22,8 @@
 using namespace std;
 
 int main(int argc, char**argv){
+    TEST(string);
+    return 0;
     TEST(ref);
     return 0;
     TEST(assign);
@@ -29,7 +31,6 @@ int main(int argc, char**argv){
     TEST(map);
     TEST(int);
     TEST(mul);
-    TEST(string);
     //TEST(strtoul);
     //TEST(time);
     return 0;
@@ -181,6 +182,13 @@ void ut_string(){
     using namespace std;
 
     string s1 = "abc123";
+
+    string s2;
+    cout << "0:" << s1.substr(0, string::npos) << endl;
+    cout << "3:" << s1.substr(3, string::npos-3) << endl;
+    cout << "6:" << s1.substr(6, string::npos-6) << endl;
+    //cout << "61:" << s1.substr(61, string::npos-61) << endl;
+
     s1 = s1.substr(0,3);
     cout << s1 <<endl;
 
