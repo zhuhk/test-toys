@@ -761,7 +761,44 @@ void test_refstr(){
 
   printf("%p %p %p\n", &str1, &str2, &s);
 }
+
+int NumberOfSetBits(int i){
+       // Java: use >>> instead of >>
+       // C or C++: use uint32_t
+       i = i - ((i >> 1) & 0x55555555);
+            i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
+                 return (((i + (i >> 4)) & 0x0F0F0F0F) * 0x01010101) >> 24;
+}
+
+void test_bitcount(){
+  time_t b,e;
+  
+  b = PR_Now();
+  for(int i=0;i<10000;i++){
+    __builtin_popcount(i);
+  }
+  e = PR_Now();
+  cout << "builtin_popcount:" << e - b << endl;
+
+  b = PR_Now();
+  for(int i=0;i<10000;i++){
+    NumberOfSetBits(i);
+  }
+  e = PR_Now();
+  cout << "NumberOfSetBits:" << e - b << endl;
+
+  for(int i=0;i<1000000;i++){
+    int i1 = __builtin_popcount(i);
+    int i2 = NumberOfSetBits(i);
+    if(i1 != i2){
+      cout << "diff: i1=" << i1 << " i2=" << i2 << endl;
+    }
+  }
+
+}
 int main () {
+  test_bitcount();
+  return 0;
   test_refstr();
   return 0;
   test_substr();

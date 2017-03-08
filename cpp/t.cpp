@@ -22,6 +22,9 @@
 using namespace std;
 
 int main(int argc, char**argv){
+    TEST(vec);
+    return 0;
+
     TEST(string);
     return 0;
     TEST(ref);
@@ -35,7 +38,29 @@ int main(int argc, char**argv){
     //TEST(time);
     return 0;
 }
+void ut_vec(){
+  vector<double> dvec;
 
+  dvec.push_back(1.83251);
+  dvec.push_back(2.93849);
+  dvec.push_back(1.13151e-5);
+  dvec.push_back(1.13151);
+  auto dit = std::lower_bound(dvec.begin(), dvec.end(), 0.43893); 
+  cout << "dpos:" << dit-dvec.begin() << endl;
+  for(auto ditem: dvec){
+    cout << "ditem:" << ditem << endl;
+  }
+
+  vector<int> vec;
+  for(int i=0;i<10;i++){
+    vec.push_back(i);
+  }
+  auto it = std::lower_bound(vec.begin(), vec.end(), 5); 
+  size_t pos = it - vec.begin();
+  cout << "pos:" << pos << endl;
+  cout << "vec[pos]:" << vec[pos] << endl;
+  cout << "vec.size:" << vec.size() << endl;
+}
 void ut_assign(){
   for(int i=0;i<100000;i++){
     string str;
@@ -181,10 +206,13 @@ void ut_enum() {
 void ut_string(){
     using namespace std;
 
-    string s1 = "abc123";
+    string s1 = "http://";
 
-    string s2;
-    cout << "0:" << s1.substr(0, string::npos) << endl;
+    auto startPos = s1.find("://");
+    startPos += 3;
+
+    cout << "0:" << s1.substr(startPos, string::npos) << endl;
+    cout << "0:" << s1.substr(startPos, string::npos-startPos) << endl;
     cout << "3:" << s1.substr(3, string::npos-3) << endl;
     cout << "6:" << s1.substr(6, string::npos-6) << endl;
     //cout << "61:" << s1.substr(61, string::npos-61) << endl;
