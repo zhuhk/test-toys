@@ -796,7 +796,35 @@ void test_bitcount(){
   }
 
 }
+
+class G{
+  public: 
+    int m = 0;
+    string dName = "name";
+};
+
+template <class T>
+class F : public G{
+  T n;
+};
+
+template <class T>
+class D : public F<T>{
+  public:
+  void print(){
+    cout << "m:" << this->m << endl;
+    cout << "name:" << this->dName << endl;
+  }
+};
+
+void test_tpl_inherit(){
+  D<int> d;
+
+  d.print();
+}
 int main () {
+  test_tpl_inherit();
+  return 0;
   test_bitcount();
   return 0;
   test_refstr();
