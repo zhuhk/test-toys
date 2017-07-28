@@ -822,7 +822,19 @@ void test_tpl_inherit(){
 
   d.print();
 }
+
+void test_snprintf(){
+  char buf[20];
+  int off = 0;
+
+  for(int i=0; i<200; i++){
+    off += snprintf(buf+off, sizeof(buf)>off?sizeof(buf)-off:0, "%d,", i);
+    printf("%d %s\n", off, buf);
+  }
+}
 int main () {
+  test_snprintf();
+  return 0;
   test_tpl_inherit();
   return 0;
   test_bitcount();
