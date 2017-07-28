@@ -16,6 +16,7 @@
 #include "misc.h"
 #include <sparsehash/sparse_hash_map>
 #include <sparsehash/dense_hash_map>
+#include <stdarg.h>
 
 using namespace std;
 using namespace google;
@@ -822,14 +823,26 @@ void test_tpl_inherit(){
 
   d.print();
 }
-
+int Snprintf(char *buf, size_t buf_size, const char *fmt, ...) {
+  va_list ap;
+  va_start (ap, fmt);
+  int real_size = vsnprintf(buf, buf_size, fmt, ap);
+  va_end (ap);
+  if(real_size < 0){
+    real_size = 0;
+  }
+  if(real_size > buf_size){
+    real_size = buf_size;
+  }
+  return real_size;
+}
 void test_snprintf(){
   char buf[20];
   int off = 0;
 
-  for(int i=0; i<200; i++){
-    off += snprintf(buf+off, sizeof(buf)>off?sizeof(buf)-off:0, "%d,", i);
-    printf("%d %s\n", off, buf);
+  for(int i=0; i<20; i++){
+    off += Snprintf(buf+off, 9-off, "%d", i);
+    printf("%d %s %d %d %d\n", off, buf, buf[9], buf[10],buf[11]);
   }
 }
 int main () {
