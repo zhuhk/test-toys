@@ -53,12 +53,12 @@ void t_mopenmp(){
     sleep(5);
   }
 }
-void t_openmp(){
+void t_openmp(int threads){
   int loopCnt = 30;
   int i;
-  #pragma omp parallel for 
+  #pragma omp parallel for num_threads(threads)
   for(i=0;i<loopCnt;i++){
-    printf("i=%03d\n", i);
+  //  printf("i=%03d\n", i);
   //  i++;
   }
   map<string, int> dict;
@@ -66,52 +66,52 @@ void t_openmp(){
     dict["abc" + to_string(i)] = i;
   }
   time_t begin = PR_Now(), end;
-  #pragma omp parallel for
-  for(int i=0;i<10000000;i++){
+  #pragma omp parallel for num_threads(threads)
+  for(int i=0;i<100000000;i++){
     int val = 1 + i;
     loopCnt = val * 100 + i;
   }
   end = PR_Now();
-  cout << "   - openmp:" << end - begin << "us" <<endl;
-  begin = end;
-  for(int i=0;i<10000000;i++){
+  cout << "- openmp-1000w:" << end - begin << "us" <<endl;
+  begin = PR_Now();
+  for(int i=0;i<100000000;i++){
     int val = 1 + i;
     loopCnt = val * 100 + i;
   }
   end = PR_Now();
-  cout << "   - openmp:" << end - begin << "us" <<endl;
+  cout << "- normal-1000w:" << end - begin << "us" <<endl;
 
-  begin = end;
-  #pragma omp parallel for
+  begin = PR_Now();
+  #pragma omp parallel for num_threads(threads)
   for(int i=0;i<1000000;i++){
     string key = "abc"+to_string(i%1000);
     loopCnt = dict[key];
   }
   end = PR_Now();
-  cout << "   - openmp:" << end - begin << "us" <<endl;
-  begin = end;
+  cout << "- openmp-dict-100w:" << end - begin << "us" <<endl;
+  begin = PR_Now();
   for(int i=0;i<1000000;i++){
     string key = "abc"+to_string(i%1000);
     loopCnt = dict[key];
   }
   end = PR_Now();
-  cout << "   - openmp:" << end - begin << "us" <<endl;
+  cout << "- normal-dict-100w:" << end - begin << "us" <<endl;
 
   begin = end;
-  #pragma omp parallel for
+  #pragma omp parallel for num_threads(threads)
   for(int i=0;i<1000;i++){
     string key = "abc"+to_string(i%1000);
     loopCnt = dict[key];
   }
   end = PR_Now();
-  cout << "   - openmp:" << end - begin << "us" <<endl;
+  cout << "- openmp-dict-1k:" << end - begin << "us" <<endl;
   begin = end;
   for(int i=0;i<1000;i++){
     string key = "abc"+to_string(i%1000);
     loopCnt = dict[key];
   }
   end = PR_Now();
-  cout << "   - openmp:" << end - begin << "us" <<endl;
+  cout << "- normal-dict-1k:" << end - begin << "us" <<endl;
 }
 
 void t_set(){
@@ -193,6 +193,11 @@ class cls{
 };
 const string cls::abc = "123";
 int main(int argc, char**argv){
+  for(int i=1;i<20;i++){
+    printf("++ threads:%d\n",i);
+    t_openmp(i);
+  }
+  return 0;
   t_mopenmp();
   return 0;
   cout << cls::abc <<endl;
@@ -200,8 +205,6 @@ int main(int argc, char**argv){
   t_strftime();
   return 0;
   t_localtime_r();
-  return 0;
-  t_openmp();
   return 0;
   t_it();
   return 0;
