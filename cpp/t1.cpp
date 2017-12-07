@@ -7,6 +7,8 @@
 #include <vector>
 #include <string>
 #include "misc.h"
+#include <pthread.h>
+#include <omp.h> 
 
 using namespace std;
 void func(int cnt){
@@ -35,6 +37,21 @@ void diff(int loopCnt, int cnt){
   end = PR_Now();
   cout << "   - openmp:" << end - begin << "us" <<endl;
 
+}
+void t_mopenmp(){
+  int loopCnt = 10;
+  omp_set_nested(1);
+  printf("main:%d\n",pthread_self());
+  #pragma omp parallel for num_threads(2)
+  for(int i=0;i<loopCnt;i++){
+    printf("i:%d thread:%d\n",i, pthread_self());
+    #pragma omp parallel for num_threads(3)
+    for(int j=0;j<loopCnt;j++){
+      printf("i:%d j:%d thread:%d\n",i, j, pthread_self());
+      sleep(5);
+    }
+    sleep(5);
+  }
 }
 void t_openmp(){
   int loopCnt = 30;
@@ -176,6 +193,8 @@ class cls{
 };
 const string cls::abc = "123";
 int main(int argc, char**argv){
+  t_mopenmp();
+  return 0;
   cout << cls::abc <<endl;
   return 0;
   t_strftime();

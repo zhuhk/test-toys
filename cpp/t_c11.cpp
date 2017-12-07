@@ -844,8 +844,17 @@ void test_snprintf(){
     off += Snprintf(buf+off, 9-off, "%d", i);
     printf("%d %s %d %d %d\n", off, buf, buf[9], buf[10],buf[11]);
   }
+  string a;
+  printf("%p %lu\n", a.c_str(), a.capacity());
+  a.reserve(1024);
+  printf("%p %lu\n", a.c_str(), a.capacity());
 }
 int main () {
+  string a;
+  double b = 0.1;
+  a += to_string(b);
+  cout << "a=" << a << endl;
+  return 0;
   test_snprintf();
   return 0;
   test_tpl_inherit();
