@@ -849,7 +849,125 @@ void test_snprintf(){
   a.reserve(1024);
   printf("%p %lu\n", a.c_str(), a.capacity());
 }
+
+static void SortTopK(const unordered_map<string, float>& feature_weight,
+    uint32_t topK,
+    vector<string>* features) {
+
+  if (topK >= feature_weight.size()) {
+    for (const auto& it : feature_weight) {
+      features->push_back(it.first);
+    }
+    return;
+  }
+
+  typedef std::pair<string, float> qMember;
+  auto comparator = [](qMember a, qMember b){
+    if(a.second == b.second){
+      cout << "k:" << a.second << " " << b.second << " " << a.first << " " << b.first<< endl;
+      return a.first > b.first;
+    }else{
+      cout << "gt:" << a.second << " " << b.second << endl;
+      return a.second > b.second;
+    }
+  };
+  priority_queue<qMember, vector<qMember>, decltype(comparator)> pqueue(comparator);
+
+  for (const auto& it : feature_weight) {
+    // sort with priority queue and select topK
+    if (pqueue.size() < topK) {
+      pqueue.push(it);
+      cout << "push:" << it.first << endl;
+    } else {
+      if (comparator(it, pqueue.top())) {
+        cout << "replace:" << pqueue.top().first << " with " << it.first << endl;
+        pqueue.pop();
+        pqueue.push(it);
+      }else{
+        cout << "skip:" << it.first << endl;
+      }
+    }
+  }
+
+  while (!pqueue.empty()) {
+    features->push_back(pqueue.top().first);
+    pqueue.pop();
+  }
+}
+void t_sort(){
+  unordered_map<string, float> feature_weight = { 
+    {"1x244",1.0}, 
+    {"2x244",10.0},
+    {"3x244",11.0},
+    {"4x244",8.0}
+  };
+  vector<string> features;
+  //SortTopK(feature_weight, 2, &features);
+  for(auto f: features){
+    cout << "f:" << f << endl;
+  }
+
+  /*unordered_map<string, float> feature_weight1 = { 
+    {"244x286x345x",1.0}, 
+    {"244x286x530x",1.0},
+    {"1x43x101x103",1.0},
+    {"244x286x337x529",1.0},
+    {"1x174x510x",1.0}
+  };
+  */
+  unordered_map<string, float> feature_weight1 = { 
+   {"21270", 0.40651}
+  ,{"20951",0.06775}
+  ,{"20320",0.06775}
+  ,{"21275",0.06775}
+  ,{"20319",0.06775}
+  ,{"20318",0.06775}
+  ,{"20317",0.06775}
+  ,{"20634",0.06775}
+  ,{"20955",0.0663}
+  ,{"20216",0.05293}
+  };
+  features.clear();
+  SortTopK(feature_weight1, 3, &features);
+  for(auto f: features){
+    cout << "f1:" << f << endl;
+  }
+
+}
+
+#define add(a,b) a+b
+void t_ptr(){
+  int x[5]={1,2,3,4,5};
+  int *ptr=(int *)(&x+1);
+  cout<<*(x+1)<<*(ptr-1) << endl;
+  printf("%d\n", 7*add(3,4));
+  int a[] = {0,1,2,3,4,5 }, *p = a+1;
+
+  cout << "ptr:" << endl;
+  cout << *(++p) << endl;
+
+}
+
+class LogMessageVoidify {
+   public:
+       LogMessageVoidify() { }
+         // This has to be an operator with a precedence lower than << but
+         // higher than ?:
+         void operator&(std::ostream&) { }
+};
+
 int main () {
+  false ? (void) 0 : LogMessageVoidify() & cout << "abc";
+  return 0;
+//  int i; for(i=1;i<10; i++) cout<<i<<endl;
+//  int i=1; for(int j=0;i<10&&j<10; i++, j++)cout<<i+j<<endl; cout<<i;
+//  int i=0; for(;i<10;i++)cout<<i;
+//  for(int i=0,j=0;i<10&&j<10;i++,j++) cout<<i+j; cout<<i;
+  t_ptr();
+  return 0;
+  t_sort();
+  return 0;
+
   string a;
   double b = 0.1;
   a += to_string(b);
