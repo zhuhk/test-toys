@@ -956,7 +956,51 @@ class LogMessageVoidify {
          void operator&(std::ostream&) { }
 };
 
+#define TEST_IF_T 1
+#define TEST_IF_F 0
+
+void t_if(){
+#if TEST_IF_T
+  cout << "if T is true" <<endl;
+#else
+  cout << "if T is false" <<endl;
+#endif
+#if TEST_IF_F
+  cout << "if F is true" <<endl;
+#else
+  cout << "if F is false" <<endl;
+#endif
+}
+
+class TestFunc{
+  public:
+    static void foo(){
+      cout << 123 << endl;
+    }
+};
+
+void t_map(){
+  map<string, string> dict = {
+    {"key","value"},
+    {"key1","value3"},
+    {"key1","value1"},
+    {"key2","value2"}
+  };
+
+  for(auto &item: dict){
+    cout << item.first << " " << item.second << endl;
+  }
+}
 int main () {
+  t_map();
+  return 0;
+  void (*ptr)() = &TestFunc::foo;
+
+  ptr();
+  return 0;
+
+  t_if();
+  return 0;
   false ? (void) 0 : LogMessageVoidify() & cout << "abc";
   return 0;
 //  int i; for(i=1;i<10; i++) cout<<i<<endl;
