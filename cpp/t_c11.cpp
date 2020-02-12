@@ -991,7 +991,39 @@ void t_map(){
     cout << item.first << " " << item.second << endl;
   }
 }
+
+void t_move(){
+  vector<string> origin = {"abc","bcd","efg"};
+  vector<string> dist;
+  for(auto &value: origin){
+    dist.push_back(std::move(value));
+  }
+  cout << "origin:" << endl;
+  for(auto &val: origin){
+    if(val.empty()){
+      continue;
+    }
+    cout << " " << val << endl;
+  }
+
+  cout << "dist:" << endl;
+  for(auto &val: dist){
+    cout << " " << val << endl;
+  }
+
+  map<string, string> m_origin = {
+    {"key-abc":"abc"},
+    {"key-bcd":"bcd"},
+    {"key-efg":"efg"}
+  };
+  vector<string> m_dist;
+  for(auto &value: m_origin){
+    dist[std::move(value.first)] = std::move(value.second);
+  }
+}
 int main () {
+  t_move();
+  return 0;
   t_map();
   return 0;
   void (*ptr)() = &TestFunc::foo;

@@ -192,7 +192,31 @@ class cls{
   const static string abc;
 };
 const string cls::abc = "123";
+
+void t_vec(){
+  vector<double> vec(24,0.1);
+  for(auto &item: vec){
+    cout << " " << item;
+    item++;
+  }
+  cout << endl;
+
+  for(auto &item: vec){
+    cout << " " << item;
+    item++;
+  }
+  cout << endl;
+
+  vector<double> vec1(24,0.1);
+  vec1 = vec;
+  for(auto &item: vec1){
+    cout << " " << item;
+  }
+  cout << endl;
+}
 int main(int argc, char**argv){
+  t_vec();
+  return 0;
   for(int i=1;i<20;i++){
     printf("++ threads:%d\n",i);
     t_openmp(i);
