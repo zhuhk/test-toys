@@ -1011,14 +1011,14 @@ void t_move(){
     cout << " " << val << endl;
   }
 
-  map<string, string> m_origin = {
-    {"key-abc":"abc"},
-    {"key-bcd":"bcd"},
-    {"key-efg":"efg"}
+  map<string, string> m_origin{
+    {"key-abc","abc"},
+      {"key-bcd","bcd"},
+      {"key-efg","efg"}
   };
-  vector<string> m_dist;
+  map<string,string> m_dist;
   for(auto &value: m_origin){
-    dist[std::move(value.first)] = std::move(value.second);
+    m_dist[std::move(value.first)] = std::move(value.second);
   }
 }
 int main () {

@@ -4,11 +4,13 @@
 #include <iostream>
 #include <map>
 #include <set>
+#include <unordered_set>
 #include <vector>
 #include <string>
 #include "misc.h"
 #include <pthread.h>
 #include <omp.h> 
+#include <future>
 
 using namespace std;
 void func(int cnt){
@@ -193,8 +195,16 @@ class cls{
 };
 const string cls::abc = "123";
 
+struct ReqDist{
+  vector<double> real_reqs;
+};
+
+
 void t_vec(){
   vector<double> vec(24,0.1);
+  vector<double> hourly_rates[2]; // 周期性更新
+  vector<double> hourly_reqs(24, 0.0); // 周期性更新，根据reql_reqs估算当前小时的计数
+  vector<double> real_reqs(24,0.0);
   for(auto &item: vec){
     cout << " " << item;
     item++;
@@ -213,9 +223,85 @@ void t_vec(){
     cout << " " << item;
   }
   cout << endl;
+
+  vector<double> v1(24);
+  vector<double> v2(2);
+  v1 = v2;
+  cout << v1.size() << " " << v2.size() << endl;
+
+  vector<double> v3[2];
+}
+
+string str_tm(struct tm &t){
+  char buf[30];
+  snprintf(buf, sizeof(buf), "%02d-%02d-%02d %02d:%02d:%02d",
+      t.tm_year + 1900, t.tm_mon + 1, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec);
+  return buf;
+}
+void t_time(){
+  struct tm tm1, tm2;
+
+  time_t now;
+  time(&now);
+
+  now += 3600 * 8;
+  
+  gmtime_r(&now, &tm1);
+
+  tm2 = tm1;
+  tm2.tm_min = 59;
+  tm2.tm_sec = 59;
+  //time_t t1 = mktime(&tm2);
+ 
+  time_t t1 = now + (59-tm1.tm_min) * 60 + (59-tm1.tm_sec);
+
+  cout << "t:" << str_tm(tm1) << " t1:" << str_tm(tm2) << endl;
+  cout << now << " " << t1 << " " << t1 - now << endl;
+}
+void t_map(){
+  unordered_set<int> s{2,3};
+  s = {1,2};
+  for(auto &item: s){
+    cout << " " << item;
+  }
+  cout << endl;
+}
+void t_prom(){
+  promise<bool> prom;
+
+//  future<bool> fut = prom.get_future();
+
+  prom.set_value(true);
+
+  future<bool> fut1 = prom.get_future();
+//  prom.set_value(true); // failure
+}
+
+class A{
+public:
+  A(string str){
+    cout << "construct A msg:" << str << endl;
+  }
+  ~A(){}
+};
+void t_local_var(){
+  cout << "begin" << endl;
+
+  A a("before");
+  return;
+
+  A b("after");
 }
 int main(int argc, char**argv){
+  t_local_var();
+  return 0;
+  t_prom();
+  return 0;
+  t_map();
+  return 0;
   t_vec();
+  return 0;
+  t_time();
   return 0;
   for(int i=1;i<20;i++){
     printf("++ threads:%d\n",i);
