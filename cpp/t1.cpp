@@ -317,7 +317,54 @@ void t_pqueue(){
     heap.pop();
   }
 }
+struct TestS{
+  int i=0;
+  int j=1;
+  string str;
+};
+void t_copyStruct(){
+  TestS s1;
+  s1.i = 2;
+  s1.j = 3;
+  s1.str = "1234";
+
+  TestS s2(s1);
+
+  cout << "s2.i:" << s2.i << endl;
+  cout << "s2.j:" << s2.j << endl;
+  cout << "s2.str:" << s2.str << endl;
+}
+struct Base{
+  int a = 0;
+  int b = 0;
+};
+struct P: public Base{
+  P(){}
+  ~P(){}
+  P(Base &base):Base(base){
+  }
+  std::mutex mtx;
+};
+void t_class_init(){
+  P src;
+  src.a = 1;
+  src.b = 2;
+
+  Base &base = src;
+
+  P dst(base);
+
+  cout << "dst:" << dst.a << " " << dst.b << endl;
+  dst.a = 3;
+  dst.b = 4;
+  cout << "dst:" << dst.a << " " << dst.b << endl;
+  cout << "src:" << src.a << " " << src.b << endl;
+}
 int main(int argc, char**argv){
+  t_class_init();
+  return 0;
+  t_copyStruct();
+  return 0;
   t_pqueue();
   return 0;
   t_time();
