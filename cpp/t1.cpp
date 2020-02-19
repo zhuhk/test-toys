@@ -11,6 +11,8 @@
 #include <pthread.h>
 #include <omp.h> 
 #include <future>
+#include <queue>
+#include <memory>
 
 using namespace std;
 void func(int cnt){
@@ -43,13 +45,13 @@ void diff(int loopCnt, int cnt){
 void t_mopenmp(){
   int loopCnt = 10;
   omp_set_nested(1);
-  printf("main:%d\n",pthread_self());
+  printf("main:%lu\n",pthread_self());
   #pragma omp parallel for num_threads(2)
   for(int i=0;i<loopCnt;i++){
-    printf("i:%d thread:%d\n",i, pthread_self());
+    printf("i:%d thread:%lu\n",i, pthread_self());
     #pragma omp parallel for num_threads(3)
     for(int j=0;j<loopCnt;j++){
-      printf("i:%d j:%d thread:%d\n",i, j, pthread_self());
+      printf("i:%d j:%d thread:%lu\n",i, j, pthread_self());
       sleep(5);
     }
     sleep(5);
@@ -128,7 +130,7 @@ void t_set(){
 }
 
 void t_readlink(){
-  int ret = symlink("./t1", "./ref.t1");
+  symlink("./t1", "./ref.t1");
   char buf[256];
   int len = readlink("./ref.t1", buf, sizeof(buf));
   if(len>=0){
@@ -164,7 +166,6 @@ void t_strftime(){
 void t_localtime_r(){
   time_t begin = PR_Now();
   for(int i=0; i<100000; i++){
-    char _strbuf[100];
     time_t now = time(NULL);
     struct tm result;
     localtime_r(&now,  &result);
@@ -172,7 +173,6 @@ void t_localtime_r(){
   cout << "time:" << PR_Now()-begin <<endl;
   begin = PR_Now();
   for(int i=0; i<100000; i++){
-    char _strbuf[100];
     time_t now = time(NULL);
     struct tm result;
     gmtime_r(&now,  &result);
@@ -202,7 +202,6 @@ struct ReqDist{
 
 void t_vec(){
   vector<double> vec(24,0.1);
-  vector<double> hourly_rates[2]; // 周期性更新
   vector<double> hourly_reqs(24, 0.0); // 周期性更新，根据reql_reqs估算当前小时的计数
   vector<double> real_reqs(24,0.0);
   for(auto &item: vec){
@@ -228,8 +227,6 @@ void t_vec(){
   vector<double> v2(2);
   v1 = v2;
   cout << v1.size() << " " << v2.size() << endl;
-
-  vector<double> v3[2];
 }
 
 string str_tm(struct tm &t){
@@ -257,6 +254,16 @@ void t_time(){
 
   cout << "t:" << str_tm(tm1) << " t1:" << str_tm(tm2) << endl;
   cout << now << " " << t1 << " " << t1 - now << endl;
+
+  printf("%ld\n", now);
+
+  t1 = now -3;
+
+  int i = 3;
+
+  if(t1 - now < i){
+    printf("small: %lu %ld\n", now, t1-now);
+  }
 }
 void t_map(){
   unordered_set<int> s{2,3};
@@ -292,7 +299,29 @@ void t_local_var(){
 
   A b("after");
 }
+struct IntCmp{
+  bool operator()(shared_ptr<int> &lhs, shared_ptr<int>&rhs){
+    return *lhs > *rhs;
+  }
+};
+void t_pqueue(){
+  priority_queue<shared_ptr<int>, vector<shared_ptr<int>>, IntCmp> heap;
+  for(int i=100;i>0; i--){
+    shared_ptr<int> ptr(new int);
+    *ptr = i;
+    heap.push(ptr);
+  }
+  while(heap.empty() == false){
+    const auto &item = heap.top();
+    cout << item.get() << " " << *item << endl;
+    heap.pop();
+  }
+}
 int main(int argc, char**argv){
+  t_pqueue();
+  return 0;
+  t_time();
+  return 0;
   t_local_var();
   return 0;
   t_prom();
@@ -300,8 +329,6 @@ int main(int argc, char**argv){
   t_map();
   return 0;
   t_vec();
-  return 0;
-  t_time();
   return 0;
   for(int i=1;i<20;i++){
     printf("++ threads:%d\n",i);
