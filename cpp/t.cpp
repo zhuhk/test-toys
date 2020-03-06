@@ -11,6 +11,7 @@
 #include <iostream>
 #include <algorithm>
 #include <typeinfo>
+#include <vector>
 #include "misc.h"
 
 #define TEST(func) \

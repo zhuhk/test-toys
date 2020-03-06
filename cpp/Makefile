@@ -16,7 +16,7 @@ CFLAGS = -Wall -fopenmp -std=c++11 -g -O2 -fPIC -I$(THIRD_DIR)/leveldb/include -
 		  $(NULL)
 CXXFLAGS = $(CFLAGS)
 CPPFLAGS = $(CFLAGS)
-LDFLAGS := -rdynamic $(LIB) 
+LDFLAGS := -rdynamic $(LIB) -lpthread
 target = t t1 t2 t_c11 t4 t_ev spawn dynlib_main dynlib.so dynlib1.so.1 t_rapidjson
 
 external:
