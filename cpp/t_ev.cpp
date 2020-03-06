@@ -57,7 +57,7 @@ int main() {
 
   memset(&sSvrAddr, 0, sizeof(sSvrAddr));   
   sSvrAddr.sin_family = AF_INET;   
-  sSvrAddr.sin_addr.s_addr = inet_addr("127.0.0.1");     
+  sSvrAddr.sin_addr.s_addr = inet_addr("0.0.0.0");     
   sSvrAddr.sin_port = htons(8888);    
 
   // 创建tcpSocket（iSvrFd），监听本机8888端口   
