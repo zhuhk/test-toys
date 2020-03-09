@@ -360,48 +360,57 @@ void t_class_init(){
   cout << "dst:" << dst.a << " " << dst.b << endl;
   cout << "src:" << src.a << " " << src.b << endl;
 }
-int main(int argc, char**argv){
-  t_class_init();
-  return 0;
-  t_copyStruct();
-  return 0;
-  t_pqueue();
-  return 0;
-  t_time();
-  return 0;
-  t_local_var();
-  return 0;
-  t_prom();
-  return 0;
-  t_map();
-  return 0;
-  t_vec();
-  return 0;
-  for(int i=1;i<20;i++){
-    printf("++ threads:%d\n",i);
-    t_openmp(i);
-  }
-  return 0;
-  t_mopenmp();
-  return 0;
-  cout << cls::abc <<endl;
-  return 0;
-  t_strftime();
-  return 0;
-  t_localtime_r();
-  return 0;
-  t_it();
-  return 0;
-  t_readlink();
-  return 0;
-  t_set();
-  return 0;
-  diff(1,10000);
-  diff(1,1000000);
-  diff(10,10000);
-  diff(10,1000000);
-  diff(1000000,10);
-  diff(10000,10000);
+struct Obj{
+  vector<int> vec;
+};
+void t_obj(){
+  Obj obj1;
+  Obj obj2(obj1);
+}
+union Sign{
+  size_t val64;
+  uint16_t val16[4];
+  uint32_t val32[2];
+};
+void t_sign(){
+  Sign sign;
 
+  cout << "size:" << sizeof(sign) << endl << endl;
+  uint32_t val = 0;
+  sign.val64 = 1024;
+  cout << "val64:" << sign.val64 << endl << endl;
+  for(int i=0; i<4; i++){
+    cout << "val16:" << sign.val16[i] << endl;
+    val += sign.val16[i];
+  }
+  cout << "sum:" << val << endl << endl;
+
+  val = 0;
+  for(int i=0; i<2; i++){
+    cout << "val32:" << sign.val32[i] << endl;
+    val += sign.val32[i];
+  }
+  cout << "sum:" << val << endl << endl;
+
+  static hash<string> str_hash;
+  sign.val64 = str_hash("123");
+  cout << "val64:" << sign.val64 << endl << endl;
+  val = 0;
+  for(int i=0; i<4; i++){
+    cout << "val16:" << sign.val16[i] << endl;
+    val += sign.val16[i];
+  }
+  cout << "sum:" << val << endl << endl;
+
+  val = 0;
+  for(int i=0; i<2; i++){
+    cout << "val32:" << sign.val32[i] << endl;
+    val += sign.val32[i];
+  }
+  cout << "sum:" << val << endl << endl;
+
+}
+int main(int argc, char**argv){
+  t_sign();
   return 0;
 }
