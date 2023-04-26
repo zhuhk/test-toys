@@ -2,6 +2,11 @@
 
 import numpy as np
 import tensorflow as tf
+import logging
+
+FORMAT = '%(asctime)s %(levelname)s %(filename)s:%(lineno)d,%(funcName)s - %(message)s'
+
+logging.basicConfig(level=logging.INFO, format=FORMAT)
 
 # Placeholders are used to feed values from python to TensorFlow ops. We define
 # two placeholders, one for input feature x, and one for output y.
@@ -36,10 +41,10 @@ sess.run(tf.global_variables_initializer())
 for i in range(1000):
     x_val, y_val = generate_data()
     _, loss_val, w_val = sess.run([train_op, loss, w], {x: x_val, y: y_val})
-    if i % 10 == 9:
-      #print("input:", ",".join(str(x) for x in np.squeeze(y_val)), "\t", ",".join(str(x) for x in np.squeeze(x_val)))
-      print("\t")
-      print("metric:", i, loss_val, ",".join(str(x) for x in np.squeeze(w_val)))
+    if (i+1) % 100 == 0:
+      logging.info("step:%d loss:%.3f w:%s", i+1
+                   , loss_val
+                   , ",".join(str(x) for x in np.squeeze(w_val))
+                   )
 
-print(loss_val, ",".join(str(x) for x in w_val))
-#print(sess.run([w])) 
+logging.info("final loss:%d w:%s", loss_val, ",".join(str(x) for x in w_val))
