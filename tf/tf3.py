@@ -18,4 +18,4 @@ z_val = sess.run(z)
 #print("Took %f seconds." % (time.time() - start))
 #print(",".join(map(str,z_val)))
 
-pprint.pprint(tf.contrib.graph_editor.get_tensors(tf.get_default_graph()))
+#pprint.pprint(tf.contrib.graph_editor.get_tensors(tf.get_default_graph()))
